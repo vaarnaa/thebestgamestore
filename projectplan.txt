@@ -1,0 +1,77 @@
+The Best Game Store
+Project plan
+-----------------------
+s
+### 1. Team
+
+* 593025 Valtteri Lipsanen
+* 590743 Viljami Virolainen
+* 594930 Antero Vaarnamo
+
+
+### 2. Goal
+
+The goal is to design and implement an online store jor JavaScript games. The service would have two distinct user groups: the developers and the players. Developers would be able to add their games to the webshop and set prices for them, and the players could buy them and play their purchaced games online.
+
+
+
+### 3. Plans
+
+
+
+#### 3.1. Page layout
+
+* Horizontal navbar is displayed up top with links to home, available games, highscores and login pages. Button for login is aligned right and the others left.
+* On the login page there will be login form for registered users, players and developers and possibility to login with gmail/facebook account. For new, unregistered users a link for registering is provided. If user successfully logs in, the users purchased games are shown below..
+* On the higscores page a form for selecting games by developer and a search form by games name are shown and highscores about a particular game are shown below.
+* On the available games page a form for selecting games by developer and a search form by games name are shown. The game(s) are shown below and after clicking the window, the user is forwarded to the game information page. On this page if user owns the game he can start playing it and otherwise is forwarded to the purchase page.
+
+
+
+#### 3.2. Control Methods
+TODO
+*
+*
+*
+
+#### 3.3. Priorities
+TODO
+
+
+
+### 4. Process and Time Schedule
+
+TODO
+
+
+The project will be started during the first weeks in 2018.
+
+* Weeks 1 to 3 Getting to know the framework and testing different options.
+* Weeks 4 to 6 Building the application
+* Week 7 Finalisation
+
+
+
+
+### 5. Testing
+The online store will go through thorough testing to find out if there are any bugs or vulnerabilities. The tests will include:
+
+* Testing the basic use of the webstore while logged in and while logged out.
+
+* Testing the webstore's recovery after an error. 
+
+* Testing the cookies and their consistency on different pages and after javascript injections.
+
+* Testing the webstore against javascript injections. (Form manipulation, cookie manipulation etc.)
+
+* Testing against privilege escalation.
+
+* Testing against fetching secure information.
+
+
+
+
+
+
+### 6. Risk Analysis
+TODO
