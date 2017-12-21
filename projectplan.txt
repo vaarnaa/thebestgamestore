@@ -1,7 +1,7 @@
 The Best Game Store
 Project plan
 -----------------------
-s
+
 ### 1. Team
 
 * 593025 Valtteri Lipsanen
@@ -29,12 +29,16 @@ The goal is to design and implement an online store jor JavaScript games. The se
 
 #### 3.2. Models
 
+Database structure
+
 * Developer: name, email, password, games
 * Player: name, email, password, games 
 * Game: name, developer, price, image, url, description
+* Highscore: game_name, player_name, score
 
 
 #### 3.3. Priorities
+
 * First priority is to develop a basic working framework for the site with all the minimum requirements.
 * Start adding non-mandatory functionalities
 * Improve UI and site security 
