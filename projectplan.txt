@@ -28,14 +28,23 @@ The goal is to design and implement an online store jor JavaScript games. The se
 
 
 
-#### 3.2. Control Methods
-TODO
-*
-*
-*
+#### 3.2. Models
+
+* Developer: name, email, games
+* Player: name, email, games, 
+* Game: name, developer, price, image, url, description
+* 
+
 
 #### 3.3. Priorities
-TODO
+* First priority is to develop a basic working framework for the site with all the minimum requirements.
+* Start adding non-mandatory functionalities
+* Improve UI and site security 
+* Make the site mobile and tablet friendly
+* Use RESTful API for showing e.g. highscores or available games
+* Make a simple javascript game
+* Include social media sharing
+
 
 
 
