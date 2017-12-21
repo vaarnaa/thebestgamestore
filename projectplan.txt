@@ -21,19 +21,17 @@ The goal is to design and implement an online store jor JavaScript games. The se
 
 #### 3.1. Page layout
 
-* Horizontal navbar is displayed up top with links to home, available games, highscores and login pages. Button for login is aligned right and the others left.
-* On the login page there will be login form for registered users, players and developers and possibility to login with gmail/facebook account. For new, unregistered users a link for registering is provided. If user successfully logs in, the users purchased games are shown below..
+* Horizontal navbar is displayed up top with links to home, available games, highscores and login/logout pages. Button for login/logout is aligned right and the others left.
+* On the login page there will be login form for registered users, players and developers and possibility to login with gmail/facebook account. For new, unregistered users a link for registering is provided. If user successfully logs in, the user's purchased/developed games are shown below.
 * On the higscores page a form for selecting games by developer and a search form by games name are shown and highscores about a particular game are shown below.
-* On the available games page a form for selecting games by developer and a search form by games name are shown. The game(s) are shown below and after clicking the window, the user is forwarded to the game information page. On this page if user owns the game he can start playing it and otherwise is forwarded to the purchase page.
-
+* On the available games page a form for selecting games by developer and a search form by games name are shown. The game(s) are shown below and after clicking the window, the user is forwarded to the game information page. On this page if the user is of type player and owns the game he/she can start playing it and otherwise is forwarded to the purchase page. On the game information page a developer can make modifications to the game (price, delete etc.)
 
 
 #### 3.2. Models
 
-* Developer: name, email, games
-* Player: name, email, games, 
+* Developer: name, email, password, games
+* Player: name, email, password, games 
 * Game: name, developer, price, image, url, description
-* 
 
 
 #### 3.3. Priorities
@@ -53,10 +51,10 @@ The goal is to design and implement an online store jor JavaScript games. The se
 TODO
 
 
-The project will be started during the first weeks in 2018.
+The project will be started during the first weeks in 2018 possibly earlier.
 
-* Weeks 1 to 3 Getting to know the framework and testing different options.
-* Weeks 4 to 6 Building the application
+* Weeks 1 to 3 Getting to know the framework, testing different options and building the basic framework with minimum functionalities.
+* Weeks 4 to 6 Adding non-mandatory functionalities to the game
 * Week 7 Finalisation
 
 
@@ -66,15 +64,10 @@ The project will be started during the first weeks in 2018.
 The online store will go through thorough testing to find out if there are any bugs or vulnerabilities. The tests will include:
 
 * Testing the basic use of the webstore while logged in and while logged out.
-
 * Testing the webstore's recovery after an error. 
-
 * Testing the cookies and their consistency on different pages and after javascript injections.
-
 * Testing the webstore against javascript injections. (Form manipulation, cookie manipulation etc.)
-
 * Testing against privilege escalation.
-
 * Testing against fetching secure information.
 
 
