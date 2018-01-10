@@ -8,6 +8,18 @@ def index(request):
     # return HttpResponse('Hello from Python!')
     return render(request, 'index.html')
 
+def games(request):
+    return render(request, 'games.html')
+
+def highscores(request):
+    return render(request, 'highscores.html')
+
+def signup(request):
+    return render(request, 'signup.html')
+
+def login(request):
+    return render(request, 'login.html')
+
 
 def db(request):
 
@@ -17,4 +29,3 @@ def db(request):
     greetings = Greeting.objects.all()
 
     return render(request, 'db.html', {'greetings': greetings})
-
