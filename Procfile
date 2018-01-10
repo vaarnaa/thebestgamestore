@@ -1,1 +1,1 @@
-web: gunicorn thebestgamescore.wsgi
+web: gunicorn thebestgamestore.wsgi
