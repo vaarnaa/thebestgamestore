@@ -39,11 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core'
-    'authentication'
-    'payments'
-    'gameService'
-    'playerFunctions'
+    'core',
+    'authentication',
+    'payments',
+    'gameService',
+    'playerFunctions',
     'developerFunctions'
 ]
 

@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 # Create your models here.
 class Greeting(models.Model):
@@ -8,7 +10,6 @@ class Game(models.Model):
     #name = models.
     url = models.URLField()
     name = models.CharField(max_length=255)
-    developer = models.CharField(max_length=255)
     price = models.PositiveIntegerField()
     image = models.ImageField()
     description = models.TextField()
@@ -23,10 +24,13 @@ class Player(models.Model):
         return user.id
 
     def username(self):
-        return user.username
+        return user.get_username()
+
+    def name(self):
+        return user.get_full_name()
 
 #* Developer: name, email, password, games
-class Developer(models.model):
+class Developer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     games = models.ManyToManyField(Game)
 
@@ -34,6 +38,9 @@ class Developer(models.model):
         return user.id
 
     def username(self):
-        return user.username
+        return user.get_username()
+
+    def name(self):
+        return user.get_full_name()
 
 #* Highscore: gameName, playerName, score
