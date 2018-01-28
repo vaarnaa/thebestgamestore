@@ -5,7 +5,7 @@ class Greeting(models.Model):
     when = models.DateTimeField('date created', auto_now_add=True)
 
 class Game(models.Model):
-    #name = models.
+    name = models.
     url = models.URLField()
     name = models.CharField(max_length=255)
     developer = models.CharField(max_length=255)
