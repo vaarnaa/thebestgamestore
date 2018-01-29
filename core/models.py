@@ -20,13 +20,13 @@ class Player(models.Model):
     games = models.ManyToManyField(Game)
 
     def get_id(self):
-        return user.id
+        return self.user.id
 
     def username(self):
-        return user.get_username()
+        return self.user.get_username()
 
     def name(self):
-        return user.get_full_name()
+        return self.user.get_full_name()
 
 #* Developer: name, email, password, games
 class Developer(models.Model):
@@ -34,12 +34,12 @@ class Developer(models.Model):
     games = models.ManyToManyField(Game)
 
     def get_id(self):
-        return user.id
+        return self.user.id
 
     def username(self):
-        return user.get_username()
+        return self.user.get_username()
 
     def name(self):
-        return user.get_full_name()
+        return self.user.get_full_name()
 
 #* Highscore: gameName, playerName, score
