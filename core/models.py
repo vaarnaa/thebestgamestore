@@ -1,5 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import User
+
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    is_player = models.BooleanField(default=False)
+    is_developer = models.BooleanField(default=False)
 
 
 # Create your models here.

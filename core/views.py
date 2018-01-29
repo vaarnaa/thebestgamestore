@@ -3,6 +3,35 @@ from django.http import HttpResponse
 
 from .models import Greeting
 
+from django.contrib.auth import login as auth_login
+from django.shortcuts import redirect
+from django.views.generic import CreateView
+
+from .forms import PlayerSignUpForm, DeveloperSignUpForm
+from .models import User
+
+class PlayerSignUp(CreateView):
+    model = User
+    form_class = PlayerSignUpForm
+    template_name = 'player_signup.html'
+
+    def form_valid(self, form):
+        user = form.save()
+        auth_login(self.request, user)
+        return redirect('/')
+
+class DeveloperSignUp(CreateView):
+    model = User
+    form_class = DeveloperSignUpForm
+    template_name = 'developer_signup.html'
+
+    def form_valid(self, form):
+        user = form.save()
+        auth_login(self.request, user)
+        return redirect('/')
+
+
+
 # Create your views here.
 def index(request):
     # return HttpResponse('Hello from Python!')
