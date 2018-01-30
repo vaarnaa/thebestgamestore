@@ -4,6 +4,7 @@ from django.db import transaction
 
 from core.models import Player, Developer, User
 
+
 class PlayerSignUpForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
