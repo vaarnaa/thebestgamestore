@@ -17,7 +17,13 @@
         <li><a href="{% url 'games' %}"><span class="glyphicon glyphicon-knight"></span> Games</a></li>
         <li><a href="{% url 'highscores' %}"><span class="glyphicon glyphicon-star"></span> Highscores</a></li>
         <li><a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        {% else %}
         <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        {% endif %}
+
+
       </ul>
     </div>
   </div>
@@ -31,6 +37,13 @@
     <a href="/" class="lang-logo">
       <img src="{% static 'lang-logo.png'%}">
     </a>
+
+    {% if user.is_authenticated %}
+      <p>Welcome, {{ user.get_username }}. Thanks for logging in.</p>
+    {% else %}
+      <p>Welcome, new user. Please log in.</p>
+    {% endif %}
+
     <h1>Getting Started with Python on Heroku</h1>
     <p>This is a sample Python application deployed to Heroku. It's a reasonably simple app - but a good foundation for understanding how to get the most out of the Heroku platform.</p>
     <a type="button" class="btn btn-lg btn-default" href="https://devcenter.heroku.com/articles/getting-started-with-python"><span class="glyphicon glyphicon-flash"></span> Getting Started with Python</a>

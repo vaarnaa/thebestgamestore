@@ -17,6 +17,7 @@ urlpatterns = [
     #url(r'^login', core.views.login, name='login'),
     #url(r'^login/$', auth_views.login, {'template_name': 'core/login.html', 'authentication_form': LoginForm}, name='login'),
     url(r'^login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
+    url(r'^logout/$', auth_views.logout, {'next_page': '/login'}, name="logout"),
     url(r'^games', core.views.games, name='games'),
     url(r'^highscores', core.views.highscores, name='highscores'),
     path('signup/', core.views.signup, name='signup'),
