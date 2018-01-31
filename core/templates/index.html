@@ -17,13 +17,18 @@
         <li><a href="{% url 'games' %}"><span class="glyphicon glyphicon-knight"></span> Games</a></li>
         <li><a href="{% url 'highscores' %}"><span class="glyphicon glyphicon-star"></span> Highscores</a></li>
         {% if user.is_authenticated %}
-        <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ user.get_username }} <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Purchased games</a></li>
+            <li><a href="#">Account</a></li>
+            <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+          </ul>
+        </li>
         {% else %}
         <li><a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
         <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
         {% endif %}
-
-
       </ul>
     </div>
   </div>
