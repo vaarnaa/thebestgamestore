@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load staticfiles %}
+{% load static %}
 
 {% block nav %}
 <nav class="navbar navbar-inverse">
@@ -10,11 +10,11 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="{% url 'core:index' %}">TheBestGameStore</a>
+      <a class="navbar-brand" href="{% url 'game_list' %}">TheBestGameStore</a>
     </div>
     <div class="collapse navbar-collapse" id="topNavbar">
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="{% url 'games' %}"><span class="glyphicon glyphicon-knight"></span> Games</a></li>
+        <li class="active"><a href="{% url 'games' %}"><span class="glyphicon glyphicon-knight"></span> Games</a></li>
         <li><a href="{% url 'highscores' %}"><span class="glyphicon glyphicon-star"></span> Highscores</a></li>
         {% if user.is_authenticated %}
         <li class="dropdown">
@@ -35,46 +35,31 @@
 </nav>
 {% endblock %}
 
+
 {% block content %}
-<div class="container">
-  <p> This is the login page
-  </p>
-
-  {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
-  {% endif %}
-
-  {% if next %}
-    {% if user.is_authenticated %}
-
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-
-    <p>Please login to see this page.</p>
-    {% endif %}
-  {% endif %}
-
-  {% if user.is_authenticated %}
-  <p>You're already logged in!</p>
-  {% else %}
-  <form method="post" action="{% url 'login' %}">
-{% csrf_token %}
-    <table>
-      <tr>
-        <td>{{ form.username.label_tag }}</td>
-        <td>{{ form.username }}</td>
-      </tr>
-      <tr>
-        <td>{{ form.password.label_tag }}</td>
-        <td>{{ form.password }}</td>
-      </tr>
-    </table>
-
-    <input type="submit" value="login" />
-    <input type="hidden" name="next" value="{{ next }}" />
-  </form>
-  {% endif %}
-
-</div>
+    <div id="sidebar">
+        <h3>Categories</h3>
+        <ul>
+            <li {% if not category %}class="selected"{% endif %}>
+                <a href="{% url "game_list" %}">All</a>
+            </li>
+        {% for c in categories %}
+            <li {% if category.slug == c.slug %}class="selected"{% endif %}>
+                <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+    <div id="main" class="game-list">
+        <h1>{% if category %}{{ category.name }}{% else %}Games{% endif %}</h1>
+        {% for game in games %}
+            <div class="item">
+                <a href="{{ game.get_absolute_url }}">
+                    <img src="{% if game.image %}{{ game.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
+                </a>
+                <a href="{{ game.get_absolute_url }}">{{ game.name }}</a><br>
+                ${{ game.price }}
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

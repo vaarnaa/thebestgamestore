@@ -1,14 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
 from .models import Greeting
-
 from django.contrib.auth import login as auth_login
 from django.shortcuts import redirect
 from django.views.generic import CreateView
-
 from .forms import PlayerSignUpForm, DeveloperSignUpForm
-from .models import User
+from .models import User, Game, Category
+from django.shortcuts import get_object_or_404
+from django.shortcuts import get_list_or_404
 
 class PlayerSignUp(CreateView):
     model = User
@@ -32,11 +31,41 @@ class DeveloperSignUp(CreateView):
 
 
 
-# Create your views here.
-def index(request):
-    # return HttpResponse('Hello from Python!')
-    return render(request, 'index.html')
+def game_list(request, category_slug=None):
+    category = None
+    categories = Category.objects.all()
+    games = Game.objects.all()
+    if category_slug:
+        category = get_object_or_404(Category, slug=category_slug)
+        games = games.filter(category=category)
+    return render(request, 'index.html', {'category': category,
+                                                      'categories': categories,
+                                                      'games': games})
 
+
+def game_detail(request, id, slug):
+    game = get_object_or_404(Game, id=id, slug=slug)
+    #cart_game_form = CartAddGameForm()
+    return render(request,
+                  'game/detail.html',
+                  {'game': game,
+                   #'cart_game_form': cart_game_form})
+                   })
+
+
+# Create your views here.
+def index(request, category_slug=None):
+    category = None
+    categories = Category.objects.all()
+    games = Game.objects.all()
+    if category_slug:
+        category = get_object_or_404(Category, slug=category_slug)
+        games = games.filter(category=category)
+    return render(request, 'index.html', {'category': category,
+                                                      'categories': categories,
+                                                      'games': games})
+
+    
 def games(request):
     return render(request, 'games.html')
 
