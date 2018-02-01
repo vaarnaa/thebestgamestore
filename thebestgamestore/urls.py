@@ -27,6 +27,8 @@ urlpatterns = [
     path('signup/developer', core.views.DeveloperSignUp.as_view(), name='developer_signup'),
     url(r'^db', core.views.db, name='db'),
     path('admin/', admin.site.urls),
+    url(r'^orders/', include('orders.urls', namespace='orders')),
+    url(r'^cart/', include('cart.urls', namespace='cart')),
     url(r'^', include('core.urls', namespace='core')),
 ]
 if settings.DEBUG:

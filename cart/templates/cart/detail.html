@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+{% block nav %}
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{% url 'core:index' %}">TheBestGameStore</a>
+    </div>
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="active"><a href="{% url 'games' %}"><span class="glyphicon glyphicon-knight"></span> Games</a></li>
+        <li><a href="{% url 'highscores' %}"><span class="glyphicon glyphicon-star"></span> Highscores</a></li>
+        {% if user.is_authenticated %}
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ user.get_username }} <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Purchased games</a></li>
+            <li><a href="#">Account</a></li>
+            <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+          </ul>
+        </li>
+        {% else %}
+        <li><a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+        <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+    <h1>Your shopping cart</h1>
+    <table class="cart">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Game</th>
+                <th>Quantity</th>
+                <th>Remove</th>
+                <th>Unit price</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in cart %}
+            {% with game=item.game %}
+            <tr>
+                <td>
+                    <a href="{{ game.get_absolute_url }}">
+                        <img src="{% if game.image %}{{ game.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
+                    </a>
+                </td>
+                <td>{{ game.name }}</td>
+                <td>
+                    <form action="{% url "cart:cart_add" game.id %}" method="post">
+                        {{ item.update_quantity_form.quantity }}
+                        {{ item.update_quantity_form.update }}
+                        <input type="submit" value="Update">
+                        {% csrf_token %}
+                    </form>
+                </td>
+                <td><a href="{% url "cart:cart_remove" game.id %}">Remove</a></td>
+                <td class="num">${{ item.price }}</td>
+                <td class="num">${{ item.total_price }}</td>
+            </tr>
+            {% endwith %}
+        {% endfor %}
+        <tr class="total">
+            <td>Total</td>
+            <td colspan="4"></td>
+            <td class="num">${{ cart.get_total_price }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <p class="text-right">
+        <a href="{% url "core:index" %}" class="button light">Continue shopping</a>
+        <a href="{% url "orders:order_create" %}" class="button">Checkout</a>
+    </p>
+{% endblock %}

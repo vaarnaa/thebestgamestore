@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+
 {% block nav %}
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
@@ -36,16 +36,21 @@
 
 
 {% block content %}
-    <div class="game-detail">
-        <img src="{% if game.image %}{{ game.image.url }}{% else %}{% static "no_image.png" %}{% endif %}">
-        <h1>{{ game.name }}</h1>
-        <h2><a href="{{ game.category.get_absolute_url }}">{{ game.category }}</a></h2>
-        <p class="price">{{ game.price }} €</p>
-        <form action="{% url "cart:cart_add" game.id %}" method="post">
-            {{ cart_game_form }}
-            {% csrf_token %}
-            <input type="submit" value="Add to cart">
-        </form>
-        {{ game.description|linebreaks }}
+    <h1>Checkout</h1>
+
+    <div class="order-info">
+        <h3>Your order</h3>
+        <ul>
+            {% for item in cart %}
+                <li>{{ item.quantity }}x {{ item.game.name }} <span>${{ item.total_price }}</span></li>
+            {% endfor %}
+        </ul>
+        <p>Total: ${{ cart.get_total_price }}</p>
     </div>
+
+    <form action="." method="post" class="order-form">
+        {{ form.as_p }}
+        <p><input type="submit" value="Place order"></p>
+        {% csrf_token %}
+    </form>
 {% endblock %}
