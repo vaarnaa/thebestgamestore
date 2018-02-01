@@ -37,7 +37,7 @@ class Game(models.Model):
     url = models.URLField()
     name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(max_length=255, db_index=True, unique=True)
-    price = models.PositiveIntegerField()
+    price =  models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField()
     description = models.TextField()
 
