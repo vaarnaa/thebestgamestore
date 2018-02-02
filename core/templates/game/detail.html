@@ -18,7 +18,11 @@
             <input type="submit" value="Add to cart">
         </form>
         {% else %}
-        <a href="{% url "login" %}" class="button">Login to add to Cart</a>
+        <form action="{% url "login"  %}" method="post">
+            {{ cart_game_form }}
+            {% csrf_token %}
+            <input type="submit" value="Login to add to Cart">
+        </form>
         {% endif %}
 
     </div>
