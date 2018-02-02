@@ -13,8 +13,8 @@ def cart_add(request, game_id):
     if form.is_valid():
         cd = form.cleaned_data
         cart.add(game=game,
-                 quantity=cd['quantity'],
-                 update_quantity=cd['update'])
+                 quantity=1,
+                 update_quantity=True)
     return redirect('cart:cart_detail')
 
 

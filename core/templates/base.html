@@ -29,9 +29,10 @@
       </div>
       <div class="collapse navbar-collapse" id="topNavbar">
         <ul class="nav navbar-nav navbar-right">
-          <li id="games" class="none"><a href="{% url 'games' %}"><span class="glyphicon glyphicon-knight"></span> Games</a></li>
-          <li id="highscores" class="none"><a href="{% url 'highscores' %}"><span class="glyphicon glyphicon-star"></span> Highscores</a></li>
+          <li id="games"  ><a href="{% url 'games' %}"><span class="glyphicon glyphicon-knight"></span> Games</a></li>
+          <li id="highscores"  ><a href="{% url 'highscores' %}"><span class="glyphicon glyphicon-star"></span> Highscores</a></li>
           {% if user.is_authenticated %}
+            <li id="cart"  ><a href="{% url 'cart:cart_detail' %}"><span class="glyphicon glyphicon-shopping-cart"></span> Shopping Cart</a></li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ user.get_username }} <span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -41,8 +42,8 @@
             </ul>
           </li>
           {% else %}
-          <li id="signup" class="none"><a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-          <li id="login" class="none"><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+          <li id="signup"  ><a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+          <li id="login"  ><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
           {% endif %}
         </ul>
       </div>

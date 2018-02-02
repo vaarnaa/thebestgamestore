@@ -184,7 +184,7 @@ ul.errorlist {
     overflow:hidden;
 }
 
-.product-list .item {
+.game-list .item {
     width:25%;
     padding:10px 20px 10px 0;
     float:left;
@@ -192,32 +192,32 @@ ul.errorlist {
     line-height:1.2;
 }
 
-.product-list .item img {
+.game-list .item img {
     width:100%;
     margin-bottom:8px;
 }
 
-.product-detail {
+.game-detail {
     text-align:justify;
 }
 
-.product-detail .price {
+.game-detail .price {
     color:#333;
     font-size:28px;
     font-weight:bold;
 }
 
-.product-detail img {
+.game-detail img {
     width:40%;
     float:left;
     padding:0 20px 20px 0;
 }
 
-.product-detail h1 {
+.game-detail h1 {
     margin-bottom:0;
 }
 
-.product-detail h2 {
+.game-detail h2 {
     margin-top:10px;
 }
 

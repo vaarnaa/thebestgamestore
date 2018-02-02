@@ -41,6 +41,17 @@ class Game(models.Model):
     image = models.ImageField(upload_to='games/%Y/%m/%d', blank=True)
     description = models.TextField()
 
+
+    def get_short_description(self):
+        length = len(self.description)
+        if (length > 100):
+            short = self.description[:80] + "..."
+            return short
+        else:
+            return self.description
+
+
+
     class Meta:
         ordering = ('name',)
         #index_together = (('id', 'slug'),)
