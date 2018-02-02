@@ -61,22 +61,6 @@ def player_activate(request, uidb64, token):
     else:
         return HttpResponse('Activation link is invalid!')
 
-def developer_activate(request, uidb64, token):
-    try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.is_player = True
-        user.save()
-        developer = Developer.objects.create(user=user)
-        auth_login(request, user)
-        return redirect('/')
-    else:
-        return HttpResponse('Activation link is invalid!')
-
 
 def developer_signup(request):
     if request.method == 'POST':
@@ -104,6 +88,23 @@ def developer_signup(request):
     else:
         form = DeveloperSignUpForm()
     return render(request, 'developer_signup.html', {'form': form})
+
+
+def developer_activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.is_developer = True
+        user.save()
+        developer = Developer.objects.create(user=user)
+        auth_login(request, user)
+        return redirect('/')
+    else:
+        return HttpResponse('Activation link is invalid!')
 
 """class PlayerSignUp(CreateView):
     model = User
