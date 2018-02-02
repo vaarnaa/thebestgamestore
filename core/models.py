@@ -5,6 +5,11 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     is_player = models.BooleanField(default=False)
     is_developer = models.BooleanField(default=False)
+    email = models.EmailField(
+        verbose_name='email address',
+        max_length=255,
+        unique=True,
+    )
 
 
 # Create your models here.
