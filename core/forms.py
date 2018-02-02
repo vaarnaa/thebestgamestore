@@ -11,13 +11,13 @@ class PlayerSignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'email', 'password1', 'password2')
 
-    @transaction.atomic
+    """@transaction.atomic
     def save(self):
         user = super().save(commit=False)
         user.is_player = True
         user.save()
         player = Player.objects.create(user=user)
-        return user
+        return user"""
 
 class DeveloperSignUpForm(UserCreationForm):
 
@@ -25,10 +25,10 @@ class DeveloperSignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'email', 'password1', 'password2')
 
-    @transaction.atomic
+    """@transaction.atomic
     def save(self):
         user = super().save(commit=False)
         user.is_developer = True
         user.save()
         developer = Developer.objects.create(user=user)
-        return user
+        return user"""
