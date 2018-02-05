@@ -152,8 +152,20 @@ def index(request, category_slug=None):
                                                       'games': games})
 
 
-def games(request):
-    return render(request, 'games.html')
+
+
+def games(request, category_slug=None):
+    category = None
+    categories = Category.objects.all()
+    uid = request.user.id
+    player = get_object_or_404(Player, user_id=uid)
+    games = player.games.all()
+    if category_slug:
+        category = get_object_or_404(Category, slug=category_slug)
+        games = games.filter(category=category)
+    return render(request, 'games.html', {'category': category,
+                                                      'categories': categories,
+                                                      'games': games})
 
 def highscores(request):
     return render(request, 'highscores.html')

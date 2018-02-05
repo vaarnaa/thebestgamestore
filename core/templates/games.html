@@ -5,8 +5,23 @@
 <script>
   $("#games").attr('class', 'active');
 </script>
-<div class="container">
-  <p> This is the games page
-  </p>
+
+<h1>My games</h1>
+{% for game in games %}
+<div class="row">
+  <div class="col-sm-6 col-md-5">
+    <div class="thumbnail">
+      <a href="{{ game.get_absolute_url }}">
+          <img src="{% if game.image %}{{ game.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
+      </a>
+      <div class="caption">
+        <h3><a href="{{ game.get_absolute_url }}">{{ game.name }}</a></h3>
+        <p>{{ game.description }}</p>
+        <button type="button" class="btn btn-primary">Play!</button>
+      </div>
+    </div>
+  </div>
 </div>
+{% endfor %}
+
 {% endblock %}

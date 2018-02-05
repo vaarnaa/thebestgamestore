@@ -1,10 +1,14 @@
 from django.contrib import admin
-from .models import Game, Category, Player
+from .models import Game, Category, Player, Developer
 
 
 class PlayerAdmin(admin.ModelAdmin):
     list_display =["username"]
 admin.site.register(Player, PlayerAdmin)
+
+class DeveloperAdmin(admin.ModelAdmin):
+    list_display =["username"]
+admin.site.register(Developer, DeveloperAdmin)
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug']

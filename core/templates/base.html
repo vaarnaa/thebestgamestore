@@ -32,14 +32,15 @@
       </div>
       <div class="collapse navbar-collapse" id="topNavbar">
         <ul class="nav navbar-nav navbar-right">
-          <li id="games"  ><a href="{% url 'games' %}"><span class="glyphicon glyphicon-knight"></span> Games</a></li>
+          {% if user.is_authenticated %}
+          <li id="games"  ><a href="{% url 'games' %}"><span class="glyphicon glyphicon-knight"></span> My games</a></li>
+          {% endif %}
           <li id="highscores"  ><a href="{% url 'highscores' %}"><span class="glyphicon glyphicon-star"></span> Highscores</a></li>
           {% if user.is_authenticated %}
             <li id="cart"  ><a href="{% url 'cart:cart_detail' %}"><span class="glyphicon glyphicon-shopping-cart"></span> Shopping Cart</a></li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ user.get_username }} <span class="caret"></span></a>
             <ul class="dropdown-menu">
-              <li><a href="#">Purchased games</a></li>
               <li><a href="#">Account</a></li>
               <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
             </ul>
@@ -54,8 +55,11 @@
   </nav>
   {% endblock %}
 
-  {% block content %}
-  {% endblock %}
+  <div class="container-fluid">
+    {% block content %}
+    {% endblock %}
+  </div>
+
 
 <!--<nav class="navbar navbar-default navbar-static-top navbar-inverse">
   <div class="container">
