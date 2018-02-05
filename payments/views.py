@@ -21,6 +21,7 @@ def payment_done(request):
     player = get_object_or_404(Player, user_id=uid)
     for item in items:
         player.games.add(item.game)
+    player.save()
     return render(request, 'payments/done.html')
 
 

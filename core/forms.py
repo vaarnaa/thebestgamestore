@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 
-from core.models import Player, Developer, User
+from core.models import Player, Developer, User, Game
 
 
 class PlayerSignUpForm(UserCreationForm):
@@ -32,3 +32,8 @@ class DeveloperSignUpForm(UserCreationForm):
         user.save()
         developer = Developer.objects.create(user=user)
         return user"""
+
+class AddGameForm(forms.ModelForm):
+    class Meta:
+        model = Game
+        fields = ('category', 'name', 'slug', 'url', 'price', 'image', 'description')

@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from .models import Greeting
 from django.contrib.auth import login as auth_login, authenticate
 from django.views.generic import CreateView
-from .forms import PlayerSignUpForm, DeveloperSignUpForm
+from .forms import PlayerSignUpForm, DeveloperSignUpForm, AddGameForm
 from .models import User, Game, Category, Player, Developer
 from django.shortcuts import get_object_or_404
 from django.shortcuts import get_list_or_404
@@ -158,14 +158,38 @@ def games(request, category_slug=None):
     category = None
     categories = Category.objects.all()
     uid = request.user.id
-    player = get_object_or_404(Player, user_id=uid)
-    games = player.games.all()
+    games = None
+    if request.user.is_player:
+        player = get_object_or_404(Player, user_id=uid)
+        games = player.games.all()
+    elif request.user.is_developer:
+        dev = get_object_or_404(Developer, user_id=uid)
+        games = dev.games.all()
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         games = games.filter(category=category)
     return render(request, 'games.html', {'category': category,
                                                       'categories': categories,
                                                       'games': games})
+
+
+def add_games(request):
+    form = AddGameForm()
+    return render(request, 'add_games.html', {'form': form })
+
+def add_game(request):
+    if request.method == 'POST':
+            game = Game.objects.create(category=get_object_or_404(Category, id=request.POST['category']),
+                                url=request.POST['url'],
+                                name=request.POST['name'],
+                                slug=request.POST['slug'],
+                                price=request.POST['price'],
+                                image=request.POST['image'],
+                                description=request.POST['description'])
+            dev = get_object_or_404(Developer, user_id=request.user.id)
+            dev.games.add(game)
+            dev.save()
+            return render(request, 'game/added.html', {'game': game})
 
 def highscores(request):
     return render(request, 'highscores.html')

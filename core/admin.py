@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Game, Category, Player, Developer
+from .models import Game, Category, Player, Developer, User
 
 
 class PlayerAdmin(admin.ModelAdmin):
@@ -22,3 +22,7 @@ class GameAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 admin.site.register(Game, GameAdmin)
 # Register your models here.
+
+class UserAdmin(admin.ModelAdmin):
+    list_display =["username", "email"]
+admin.site.register(User, UserAdmin)
