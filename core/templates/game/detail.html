@@ -12,17 +12,23 @@
         <p class="price">{{ game.price }} €</p>
         {{ game.description|linebreaks }}
         {% if user.is_authenticated and user.is_player %}
-        <form action="{% url "cart:cart_add" game.id %}" method="post">
-            {{ cart_game_form }}
-            {% csrf_token %}
-            <input type="submit" value="Add to cart">
-        </form>
+          <form action="{% url "cart:cart_add" game.id %}" method="post">
+              {{ cart_game_form }}
+              {% csrf_token %}
+              <input type="submit" value="Add to cart">
+          </form>
         {% elif  not user.is_authenticated %}
-        <form action="{% url "login"  %}" method="post">
-            {{ cart_game_form }}
-            {% csrf_token %}
-            <input type="submit" value="Login to add to Cart">
-        </form>
+          <form action="{% url "login"  %}" method="post">
+              {{ cart_game_form }}
+              {% csrf_token %}
+              <input type="submit" value="Login to add to Cart">
+          </form>
+        {% elif user.is_authenticated and user.is_developer %}
+          <form action="{% url "remove_game" %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name='id' value={{game.id}}>
+              <input type="submit" value="Remove game">
+          </form>
         {% endif %}
 
     </div>

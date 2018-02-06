@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<script>
+  $("#games").attr('class', 'active');
+</script>
+    <div >
+      <h1>Removed {{ game_name }}</h1>
+    </div>
+{% endblock %}

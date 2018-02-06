@@ -12,18 +12,20 @@ from payments.forms import PaymentForm
 
 @csrf_exempt
 def payment_done(request):
-    pid = request.GET['pid']
-    order = get_object_or_404(Order, id=pid)
-    order.paid = True
-    order.save()
-    items = order.items.all()
-    uid = request.user.id
-    player = get_object_or_404(Player, user_id=uid)
-    for item in items:
-        player.games.add(item.game)
-    player.save()
-    return render(request, 'payments/done.html')
-
+    if request.GET['result'] == 'success':
+        pid = request.GET['pid']
+        order = get_object_or_404(Order, id=pid)
+        order.paid = True
+        order.save()
+        items = order.items.all()
+        uid = request.user.id
+        player = get_object_or_404(Player, user_id=uid)
+        for item in items:
+            player.games.add(item.game)
+        player.save()
+        return render(request, 'payments/done.html')
+    else:
+        return render(request, 'payments/canceled.html')
 
 @csrf_exempt
 def payment_canceled(request):

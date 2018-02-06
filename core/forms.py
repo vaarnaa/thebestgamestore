@@ -36,4 +36,4 @@ class DeveloperSignUpForm(UserCreationForm):
 class AddGameForm(forms.ModelForm):
     class Meta:
         model = Game
-        fields = ('category', 'name', 'slug', 'url', 'price', 'image', 'description')
+        fields = ('category', 'name', 'url', 'price', 'image', 'description')

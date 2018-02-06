@@ -3,7 +3,7 @@
 
 {% block content %}
 <script>
-  $("#index").attr('class', 'navbar-brand active');
+  $("#add_games").attr('class', 'active');
 </script>
     <div class="game-detail">
         <img src="{% if game.image %}{{ game.image.url }}{% else %}{% static "no_image.png" %}{% endif %}">
@@ -11,19 +11,6 @@
         <h2><a href="{{ game.category.get_absolute_url }}">{{ game.category }}</a></h2>
         <p class="price">{{ game.price }} €</p>
         {{ game.description|linebreaks }}
-        {% if user.is_authenticated and user.is_player %}
-        <form action="{% url "cart:cart_add" game.id %}" method="post">
-            {{ cart_game_form }}
-            {% csrf_token %}
-            <input type="submit" value="Add to cart">
-        </form>
-        {% elif  not user.is_authenticated %}
-        <form action="{% url "login"  %}" method="post">
-            {{ cart_game_form }}
-            {% csrf_token %}
-            <input type="submit" value="Login to add to Cart">
-        </form>
-        {% endif %}
 
     </div>
 {% endblock %}

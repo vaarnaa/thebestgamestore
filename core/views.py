@@ -177,19 +177,47 @@ def add_games(request):
     form = AddGameForm()
     return render(request, 'add_games.html', {'form': form })
 
+
+
+
 def add_game(request):
     if request.method == 'POST':
-            game = Game.objects.create(category=get_object_or_404(Category, id=request.POST['category']),
-                                url=request.POST['url'],
-                                name=request.POST['name'],
-                                slug=request.POST['slug'],
-                                price=request.POST['price'],
-                                image=request.POST['image'],
-                                description=request.POST['description'])
-            dev = get_object_or_404(Developer, user_id=request.user.id)
-            dev.games.add(game)
-            dev.save()
-            return render(request, 'game/added.html', {'game': game})
+        slugger = request.POST['name'].lower().replace(' ', '-').replace('ä', 'a').replace('ö', 'o')
+        if Game.objects.filter(slug=slugger):
+            i = 1
+            slugger = slugger  + str(i)
+            while Game.objects.filter(slug=slugger):
+                i += 1
+                slugger = slugger  + str(i)
+
+        img = 'no_image.png'
+        if request.FILES.get('image',False):
+            img = request.FILES['image']
+        game = Game.objects.create(category=get_object_or_404(Category, id=request.POST['category']),
+                            url=request.POST['url'],
+                            name=request.POST['name'],
+                            slug=slugger,
+                            price=request.POST['price'],
+                            image=img,
+                            description=request.POST['description'])
+        dev = get_object_or_404(Developer, user_id=request.user.id)
+        dev.games.add(game)
+        dev.save()
+    return render(request, 'game/added.html', {'game': game})
+
+
+def remove_game(request):
+    id = request.POST['id']
+    game = get_object_or_404(Game, id=id)
+    uid = request.user.id
+    dev = get_object_or_404(Developer, user_id=uid)
+    games = dev.games.all()
+    if game in games:
+        name = game.name
+        game.delete(keep_parents=True)
+        return render(request, 'game/removed.html', {'game_name': name})
+    else:
+        return render(request, 'index.html')
 
 def highscores(request):
     return render(request, 'highscores.html')
