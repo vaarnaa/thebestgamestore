@@ -132,13 +132,38 @@ def developer_activate(request, uidb64, token):
 def game_detail(request, id, slug):
     game = get_object_or_404(Game, id=id, slug=slug)
     cart_game_form = CartAddGameForm()
-    return render(request,
-                  'game/detail.html',
-                  {'game': game,
-                   'cart_game_form': cart_game_form})
+    the_user = request.user
+    if the_user.is_authenticated and the_user.is_player:
+        player = get_object_or_404(Player, user_id=the_user.id)
+        games = player.games.all()
+        if game in games:
+            return render(request,
+                        'game/detail_owned.html',
+                        {'game': game})
+        else:
+            return render(request,
+                        'game/detail.html',
+                        {'game': game,
+                        'cart_game_form': cart_game_form})
 
+    elif the_user.is_authenticated and the_user.is_developer:
+        dev = get_object_or_404(Developer, user_id=the_user.id)
+        games = dev.games.all()
+        if game in games:
+            return render(request,
+                        'game/detail_dev.html',
+                        {'game': game})
+        else:
+            return render(request,
+                        'game/detail.html',
+                        {'game': game,
+                        'cart_game_form': cart_game_form})
 
-
+    else:
+        return render(request,
+                    'game/detail.html',
+                    {'game': game,
+                    'cart_game_form': cart_game_form})
 # Create your views here.
 def index(request, category_slug=None):
     category = None
