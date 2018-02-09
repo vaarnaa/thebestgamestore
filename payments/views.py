@@ -7,6 +7,9 @@ from core.models import Player, Developer
 from django.views.decorators.csrf import csrf_exempt
 from hashlib import md5
 from payments.forms import PaymentForm
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+
 
 
 
@@ -20,9 +23,28 @@ def payment_done(request):
         items = order.items.all()
         uid = request.user.id
         player = get_object_or_404(Player, user_id=uid)
+        games = []
         for item in items:
             player.games.add(item.game)
+            games.append(item.game)
         player.save()
+
+
+        mail_subject = 'Thank you for your order!'
+        message = render_to_string('payments/done_email.html', {
+            'user': request.user,
+            'first_name': order.first_name,
+            'last_name': order.last_name,
+            'email': order.email,
+            'address': order.address,
+            'postal_code': order.postal_code,
+            'city': order.city,
+            'games': games,
+            'price': order.get_total_cost()})
+        to_email = order.email
+        email = EmailMessage(mail_subject, message, to=[to_email])
+        email.send()
+
         return render(request, 'payments/done.html')
     else:
         return render(request, 'payments/canceled.html')

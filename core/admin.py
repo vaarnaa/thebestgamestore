@@ -21,7 +21,7 @@ class GameAdmin(admin.ModelAdmin):
     list_editable = ['url', 'name', 'slug', 'price', 'image', 'description']
     prepopulated_fields = {'slug': ('name',)}
 admin.site.register(Game, GameAdmin)
-# Register your models here.
+
 
 class UserAdmin(admin.ModelAdmin):
     list_display =["username", "email"]

@@ -1,0 +1,18 @@
+{% autoescape off %}
+Thank you for your purchase {{ user.username }},
+
+Your billing information:
+First name: {{ first_name }}
+Last name: {{ last_name }}
+Email: {{ email }}
+Address: {{ address }}
+Postal code: {{ postal_code }}
+City: {{ city }}
+
+Purchased games:
+{% for game in games %}
+{{ game.name }} {{ game.price }}€
+{% endfor %}
+Total price: {{ price }}€
+
+{% endautoescape %}
