@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Game Service</title>
-  <meta charset="utf-8">
-  <script src="lib/jquery-3.2.1.min.js"></script>
-  <script>
-  /* global $ */
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<script>
+  $("#games").attr('class', 'active');
   $(document).ready(function() {
     'use strict';
     $(window).on('message', function(evt) {
@@ -13,16 +11,12 @@
 
       //Get data from sent message
       var data = evt.originalEvent.data;
-      //Create a new list item based on the data
-      var newItem = '\n\t<li>' + (data.payload || '') + '</li>';
-      //Add the item to the beginning of the actions list
-      $('#actions').prepend(newItem);
+      
     });
   });
-  </script>
-</head>
+   
+</script>
 
-<body>
-  <iframe id="encoder_iframe" src={gameUrl}></iframe>
-</body>
-</html>
+<div><iframe id="encoder_iframe" src={gameUrl}></iframe></div>
+
+{% endblock %}

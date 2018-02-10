@@ -12,7 +12,7 @@
         <p class="price">{{ game.price }} €</p>
         {{ game.description|linebreaks }}
         {% if user.is_authenticated and user.is_player %}
-          <button type="button" class="btn btn-primary">Play!</button>
+            <a href="{% url 'game' %}" class="btn btn-info" role="button">Play</a>
         {% endif %}
 
     </div>
