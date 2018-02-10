@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'^orders/', include('orders.urls', namespace='orders')),
     url(r'^payments/', include('payments.urls', namespace='payments')),
     url(r'^', include('core.urls', namespace='core')),
+    url(r'^', include('gameService.urls', namespace='gameService')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
