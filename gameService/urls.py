@@ -4,5 +4,5 @@ from . import views
 app_name = 'gameService'
 
 urlpatterns = [
-    url(r'^(?P<id>\d+)/(?P<slug>[-\w]+)/$', views.game, name='game'),
+    url(r'^play/(?P<id>\d+)/$', views.play, name='play'),
 ]
