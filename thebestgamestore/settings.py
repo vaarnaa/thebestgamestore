@@ -43,8 +43,6 @@ INSTALLED_APPS = [
     'authentication',
     'payments',
     'gameService',
-    'playerFunctions',
-    'developerFunctions',
     'orders',
     'cart',
 
