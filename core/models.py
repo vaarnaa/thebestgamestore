@@ -96,10 +96,10 @@ class Developer(models.Model):
 
 
 class Highscore(models.Model):
+    DEFAULT_PK = 1
     game = models.ForeignKey(Game,
                              related_name='highscores',
-                             on_delete=models.CASCADE,
-                             primary_key=True)
+                             on_delete=models.CASCADE)
     player = models.ForeignKey(Player,
                                related_name='highscores',
                                null=True,
