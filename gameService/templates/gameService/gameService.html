@@ -47,6 +47,8 @@
 
       if(data.messageType == "SCORE"){
         post('/play/savescore/'+ game_id , data );
+      } else if(data.messageType == "SAVE"){
+        post('/play/savegame/'+ game_id , data );
       }
 
     });

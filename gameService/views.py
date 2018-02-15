@@ -43,9 +43,14 @@ def savescore(request, id):
 
 def savegame(request, game_id):
 
-    player = get_object_or_404(Player, get_id=player_id)
-    game = get_object_or_404(Game, id=game_id)
-    gameUrl = game.url
+    player = get_object_or_404(Player, user_id=request.user.id)
+    game = get_object_or_404(Game, id=id)
+    new_score = int(request.POST['score'])
+    Gamestate.objects.create(game=game,
+                                 player=player,
+                                 data=data)
+
+    return redirect(reverse('highscores'), permanent=True)
 
     return render(request, 'gameService/gameService.html', {'gameUrl': gameUrl})
 

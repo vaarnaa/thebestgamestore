@@ -108,3 +108,17 @@ class Highscore(models.Model):
 
     def player_name(self):
         return self.player.username()
+
+class Gamestate(models.Model):
+    game = models.ForeignKey(Game,
+                             related_name='gamestate',
+                             on_delete=models.CASCADE,
+                             primary_key=True)
+    player = models.ForeignKey(Player,
+                               related_name='gamestate',
+                               null=True,
+                               on_delete=models.SET_NULL)
+    data = models.TextField()
+
+    def player_name(self):
+        return self.player.username()
