@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Greeting
 from django.contrib.auth import login as auth_login, authenticate
 from django.views.generic import CreateView
 from .forms import PlayerSignUpForm, DeveloperSignUpForm, AddGameForm
@@ -238,21 +237,22 @@ def remove_game(request):
         return render(request, 'index.html')
 
 def highscores(request):
-    scores = Highscore.objects.all()
+    games = Game.objects.all()
+    scores = []
+    for game in games:
+        if game.highscores.all():
+            s = game.highscores.all().order_by("-score")
+            scores.append(s[0])
     return render(request, 'highscores.html', {'scores': scores})
+
+def player_highscores(request):
+    player = get_object_or_404(Player, user_id=request.user.id)
+    scores = player.highscores.all()
+
+    return render (request, 'player_highscores.html', {"scores": scores})
 
 def signup(request):
     return render(request, 'signup.html')
 
 def login(request):
     return render(request, 'login.html')
-
-
-def db(request):
-
-    greeting = Greeting()
-    greeting.save()
-
-    greetings = Greeting.objects.all()
-
-    return render(request, 'db.html', {'greetings': greetings})

@@ -13,11 +13,6 @@ class User(AbstractUser):
 
 
 # Create your models here.
-class Greeting(models.Model):
-    when = models.DateTimeField('date created', auto_now_add=True)
-
-
-# Create your models here.
 class Category(models.Model):
     DEFAULT_PK = 1
     name = models.CharField(max_length=200, db_index=True)
@@ -35,9 +30,8 @@ class Category(models.Model):
         return reverse('core:game_list_by_category', args=[self.slug])
 
 
-
-
 class Game(models.Model):
+
     category = models.ForeignKey(Category, related_name='games', on_delete=models.CASCADE)
     url = models.URLField()
     name = models.CharField(max_length=255, db_index=True)
@@ -45,7 +39,6 @@ class Game(models.Model):
     price =  models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to='games/%Y/%m/%d', blank=True)
     description = models.TextField()
-
 
     def get_short_description(self):
         length = len(self.description)
@@ -103,8 +96,14 @@ class Developer(models.Model):
 
 
 class Highscore(models.Model):
-    game = models.OneToOneField(Game, on_delete=models.CASCADE, primary_key=True)
-    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    game = models.ForeignKey(Game,
+                             related_name='highscores',
+                             on_delete=models.CASCADE,
+                             primary_key=True)
+    player = models.ForeignKey(Player,
+                               related_name='highscores',
+                               null=True,
+                               on_delete=models.SET_NULL)
     score = models.IntegerField(default=0)
 
     def player_name(self):

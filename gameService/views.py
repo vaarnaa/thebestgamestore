@@ -26,17 +26,18 @@ def savescore(request, id):
 
     player = get_object_or_404(Player, user_id=request.user.id)
     game = get_object_or_404(Game, id=id)
-    highscore = Highscore.objects.filter(game=game)
+    player_score = player.highscores.filter(game=game)
     new_score = int(request.POST['score'])
-    if highscore:
-        if highscore[0].score < new_score:
-            highscore[0].score = new_score
-            highscore[0].player = player
-            highscore[0].save()
+    if player_score:
+        if player_score[0].score < new_score:
+            player_score[0].score = new_score
+            player_score[0].player = player
+            player_score[0].save()
     else:
         Highscore.objects.create(game=game,
                                  player=player,
                                  score=new_score)
+
     return redirect(reverse('highscores'), permanent=True)
 
 
