@@ -6,38 +6,43 @@
 <script>
   $("#highscores").attr('class', 'active');
 </script>
-<h1>Highscores</h1>
+<div class="row">
 
-<div class="col-lg-2">
-  <ul class="nav nav-pills nav-stacked">
-    <li role="presentation">  <a href="{% url "highscores" %}">Global</a></li>
-    <li role="presentation" class="active">  <a href="{% url "player_highscores" %}">My highscores</a></li>
+  <div class="col-lg-2">
+    <ul class="nav nav-pills nav-stacked">
+      <li role="presentation">  <a href="{% url "highscores" %}">Global</a></li>
+      <li role="presentation" class="active">  <a href="{% url "player_highscores" %}">My highscores</a></li>
 
-  </ul>
-</div>
+    </ul>
+  </div>
+  <div class="col-lg-10">
 
-{% for score in scores %}
-  <div class="row">
-    <div class="col-sm-4 col-md-2">
-      <div class="thumbnail">
-        <a href="{{ score.game.get_absolute_url }}">
-            <img src="{% if score.game.image %}{{ score.game.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
-        </a>
-        <div class="caption">
-          <h3><a href="{{ score.game.get_absolute_url }}">{{ score.game.name }}</a></h3>
-          <table class="table">
-            <tr>
-              <th>Player</th>
-              <th>Score</th>
-            </tr>
-            <tr>
-              <td>{{ score.player_name }}</td>
-              <td>{{ score.score }}</td>
-            </tr>
-          </table>
+    <h1>Highscores</h1>
+    <div class="row">
+      {% for score in scores %}
+      <div class="col-sm-4 col-md-4">
+        <div class="thumbnail">
+          <a href="{{ score.game.get_absolute_url }}">
+              <img src="{% if score.game.image %}{{ score.game.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
+          </a>
+          <div class="caption">
+            <h3><a href="{{ score.game.get_absolute_url }}">{{ score.game.name }}</a></h3>
+            <table class="table">
+              <tr>
+                <th>Player</th>
+                <th>Score</th>
+              </tr>
+              <tr>
+                <td>{{ score.player_name }}</td>
+                <td>{{ score.score }}</td>
+              </tr>
+            </table>
+          </div>
         </div>
       </div>
+      {% endfor %}
     </div>
   </div>
-{% endfor %}
+</div>
+
 {% endblock %}

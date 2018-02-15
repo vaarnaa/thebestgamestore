@@ -12,8 +12,8 @@
 {% if not games %}
   <h3>You don't have any games yet.</h3>
 {% endif %}
-  {% for game in games %}
     <div class="row">
+      {% for game in games %}
       <div class="col-sm-6 col-md-5">
         <div class="thumbnail">
           <a href="{{ game.get_absolute_url }}">
@@ -25,15 +25,17 @@
           </div>
         </div>
       </div>
+      {% endfor %}
     </div>
-  {% endfor %}
+
 
 {% elif user.is_developer %}
 {% if not games %}
   <h3>You don't have any games yet.</h3>
 {% endif %}
-{% for game in games %}
+
   <div class="row">
+    {% for game in games %}
     <div class="col-sm-6 col-md-5">
       <div class="thumbnail">
         <a href="{{ game.get_absolute_url }}">
@@ -45,8 +47,9 @@
         </div>
       </div>
     </div>
+    {% endfor %}
   </div>
-{% endfor %}
+
 {% else %}
     <h3>You must log in first.</h3>
 {% endif %}
