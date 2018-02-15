@@ -30,7 +30,7 @@ def payment_done(request):
         player.save()
 
 
-        mail_subject = 'Thank you for your order!'
+        mail_subject = 'Thank you for your purchase!'
         message = render_to_string('payments/done_email.html', {
             'user': request.user,
             'first_name': order.first_name,
@@ -52,6 +52,9 @@ def payment_done(request):
 @csrf_exempt
 def payment_canceled(request):
     return render(request, 'payments/canceled.html')
+@csrf_exempt
+def payment_error(request):
+    return render(request, 'payments/error.html')
 
 def checksum(pid, sid, amount, token):
     checksumstr = "pid={}&sid={}&amount={}&token={}".format(pid, sid, amount, settings.SECRET_KEY)
@@ -77,7 +80,7 @@ def payment_process(request):
         'amount':       amount,
         'success_url':  'http://{}{}'.format(host, reverse('payments:done')),
         'cancel_url':   'http://{}{}'.format(host, reverse('payments:canceled')),
-        'error_url':    'http://{}{}'.format(host, reverse('payments:canceled')),
+        'error_url':    'http://{}{}'.format(host, reverse('payments:error')),
         'checksum':     checksum
     }
     form = PaymentForm(payment_details)

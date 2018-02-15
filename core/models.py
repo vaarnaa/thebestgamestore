@@ -71,7 +71,8 @@ class Game(models.Model):
 
 
 
-#* Player: name, email, password, games
+
+
 
 class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
@@ -100,4 +101,11 @@ class Developer(models.Model):
     def name(self):
         return self.user.get_full_name()
 
-#* Highscore: gameName, playerName, score
+
+class Highscore(models.Model):
+    game = models.OneToOneField(Game, on_delete=models.CASCADE, primary_key=True)
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    score = models.IntegerField(default=0)
+
+    def player_name(self):
+        return self.player.username()

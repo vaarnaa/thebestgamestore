@@ -6,7 +6,7 @@
   $("#signup").attr('class', 'active');
 </script>
 <div class="container">
-  <p> This is the signup page</p>
+  <h1>Signup</h1>
   {% if user.is_authenticated %}
     <p>You're logged in. Please <a href="{% url 'logout' %}">log out</a> before signing up for a new account.</p>
   {% else %}

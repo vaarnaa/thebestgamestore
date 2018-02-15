@@ -2,21 +2,61 @@
 {% load staticfiles %}
 
 {% block content %}
+<form id="form" method="post">
+  {% csrf_token %}
+</form>
+
+
 <script>
   $("#games").attr('class', 'active');
-  $(document).ready(function() {
+  $(document).ready(function () {
     'use strict';
-    $(window).on('message', function(evt) {
-      //Note that messages from all origins are accepted
+    var win_url = window.location
+    var game_id = win_url.pathname;
+    game_id = game_id.replace("/play/", '');
+    console.log(game_id);
 
-      //Get data from sent message
-      var data = evt.originalEvent.data;
-      
+
+    $(window).on('message', function (event) {
+      var data = event.originalEvent.data;
+      console.log("ajetaan event");
+
+      // https://stackoverflow.com/questions/133925/javascript-post-request-like-a-form-submit
+      function post(path, params, method) {
+          method = method || "post"; // Set method to post by default if not specified.
+
+          // The rest of this code assumes you are not using a library.
+          // It can be made less wordy if you use one.
+          var form = document.getElementById('form');
+          form.setAttribute("method", method);
+          form.setAttribute("action", path);
+
+          for(var key in params) {
+              if(params.hasOwnProperty(key)) {
+                  var hiddenField = document.createElement("input");
+                  hiddenField.setAttribute("type", "hidden");
+                  hiddenField.setAttribute("name", key);
+                  hiddenField.setAttribute("value", params[key]);
+
+                  form.appendChild(hiddenField);
+              }
+          }
+          document.body.appendChild(form);
+          form.submit();
+      }
+
+      if(data.messageType == "SCORE"){
+        post('/play/savescore/'+ game_id , data );
+      }
+
     });
-  });
-   
-</script>
 
-<div><iframe id="encoder_iframe" src={{ gameUrl }}></iframe></div>
+
+  });
+</script>
+<h1>{{ game.name }}</h1>
+<div class="embed-responsive embed-responsive-16by9">
+  <iframe id="encoder_iframe" src={{ gameUrl }}></iframe>
+</div>
 
 {% endblock %}

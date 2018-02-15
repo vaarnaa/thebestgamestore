@@ -4,7 +4,7 @@ from .models import Greeting
 from django.contrib.auth import login as auth_login, authenticate
 from django.views.generic import CreateView
 from .forms import PlayerSignUpForm, DeveloperSignUpForm, AddGameForm
-from .models import User, Game, Category, Player, Developer
+from .models import User, Game, Category, Player, Developer, Highscore
 from django.shortcuts import get_object_or_404
 from django.shortcuts import get_list_or_404
 from cart.forms import CartAddGameForm
@@ -179,9 +179,7 @@ def index(request, category_slug=None):
 
 
 
-def games(request, category_slug=None):
-    category = None
-    categories = Category.objects.all()
+def games(request):
     uid = request.user.id
     games = None
     if request.user.is_player:
@@ -190,12 +188,7 @@ def games(request, category_slug=None):
     elif request.user.is_developer:
         dev = get_object_or_404(Developer, user_id=uid)
         games = dev.games.all()
-    if category_slug:
-        category = get_object_or_404(Category, slug=category_slug)
-        games = games.filter(category=category)
-    return render(request, 'games.html', {'category': category,
-                                                      'categories': categories,
-                                                      'games': games})
+    return render(request, 'games.html', {'games': games})
 
 
 def add_games(request):
@@ -245,7 +238,8 @@ def remove_game(request):
         return render(request, 'index.html')
 
 def highscores(request):
-    return render(request, 'highscores.html')
+    scores = Highscore.objects.all()
+    return render(request, 'highscores.html', {'scores': scores})
 
 def signup(request):
     return render(request, 'signup.html')
