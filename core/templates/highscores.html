@@ -19,7 +19,7 @@
     <div class="row">
       {% for score in scores %}
       <div class="col-sm-4 col-md-4">
-        <div class="thumbnail">
+        <div style="height:400px; overflow-y: auto; class="thumbnail">
           <a href="{{ score.game.get_absolute_url }}">
               <img src="{% if score.game.image %}{{ score.game.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
           </a>
