@@ -41,18 +41,16 @@ def savescore(request, id):
     return redirect(reverse('highscores'), permanent=True)
 
 
-def savegame(request, game_id):
+def savegame(request, id):
 
     player = get_object_or_404(Player, user_id=request.user.id)
     game = get_object_or_404(Game, id=id)
-    new_score = int(request.POST['score'])
+    gamestate = request.POST['gameState']
     Gamestate.objects.create(game=game,
                                  player=player,
-                                 data=data)
+                                 gamestate=gamestate)
 
-    return redirect(reverse('highscores'), permanent=True)
 
-    return render(request, 'gameService/gameService.html', {'gameUrl': gameUrl})
 
 def loadgame(request, game_id):
 
