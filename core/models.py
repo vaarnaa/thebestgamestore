@@ -110,10 +110,7 @@ class Highscore(models.Model):
         return self.player.username()
 
 class Gamestate(models.Model):
-    game = models.ForeignKey(Game,
-                             related_name='gamestate',
-                             on_delete=models.CASCADE,
-                             primary_key=True)
+    game = models.OneToOneField(Game, on_delete=models.CASCADE, primary_key=True)
     player = models.ForeignKey(Player,
                                related_name='gamestate',
                                null=True,
