@@ -11,8 +11,8 @@
   {% if user.is_authenticated %}
     <p>You're logged in. Please <a href="{% url 'logout' %}">log out</a> before signing up for a new account.</p>
   {% else %}
-    <p> Sign up as <a href="{% url 'player_signup' %}" class="btn btn-primary" role="button">player</a></p>
-    <p> Sign up as <a href="{% url 'developer_signup' %}"class="btn btn-success" role="button">developer</a></p>
+    <p> Sign up for a <a href="{% url 'player_signup' %}" class="btn btn-primary" role="button">player</a> or <a href="{% url 'developer_signup' %}"class="btn btn-success" role="button">developer</a> account</p>
+    <!--<p> Sign up as <a href="{% url 'developer_signup' %}"class="btn btn-success" role="button">developer</a></p>-->
   {% endif %}
 </div>
 {% endblock %}
