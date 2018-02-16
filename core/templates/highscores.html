@@ -11,7 +11,9 @@
   <div class="col-lg-2">
     <ul class="nav nav-pills nav-stacked">
       <li role="presentation" class="active">  <a href="{% url "highscores" %}">Global higscores</a></li>
+      {% if user.is_authenticated and user.is_player%}
       <li role="presentation">  <a href="{% url "player_highscores" %}">My highscores</a></li>
+      {% endif %}
     </ul>
   </div>
   <div class="col-lg-10">
