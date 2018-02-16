@@ -210,11 +210,14 @@ def add_game(request):
         img = 'no_image.png'
         if request.FILES.get('image',False):
             img = request.FILES['image']
+        price = 0
+        if float(request.POST['price']) > 0:
+            price = request.POST['price']
         game = Game.objects.create(category=get_object_or_404(Category, id=request.POST['category']),
                             url=request.POST['url'],
                             name=request.POST['name'],
                             slug=slugger,
-                            price=request.POST['price'],
+                            price=price,
                             image=img,
                             description=request.POST['description'])
         dev = get_object_or_404(Developer, user_id=request.user.id)
@@ -242,7 +245,7 @@ def highscores(request):
     for game in games:
         if game.highscores.all():
             s = game.highscores.all().order_by("-score")
-            scores.append(s[0])
+            scores.append(game)
     return render(request, 'highscores.html', {'scores': scores})
 
 def player_highscores(request):

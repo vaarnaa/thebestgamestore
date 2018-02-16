@@ -17,23 +17,27 @@
   <div class="col-lg-10">
   <h1>Highscores</h1>
     <div class="row">
-      {% for score in scores %}
-      <div class="col-sm-4 col-md-4">
-        <div style="height:400px; overflow-y: auto; class="thumbnail">
-          <a href="{{ score.game.get_absolute_url }}">
-              <img src="{% if score.game.image %}{{ score.game.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
+      {% for game in scores %}
+      <div class="col-sm-5 col-md-5">
+        <div style="height:550px; overflow-y: auto;" class="thumbnail">
+          <a href="{{ game.get_absolute_url }}">
+              <img src="{% if game.image %}{{ game.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}" height="300" width="300">
           </a>
           <div class="caption">
-            <h3><a href="{{ score.game.get_absolute_url }}">{{ score.game.name }}</a></h3>
+            <h3><a href="{{ game.get_absolute_url }}">{{ game.name }}</a></h3>
             <table class="table">
               <tr>
+                <th>Rank</th>
                 <th>Player</th>
                 <th>Score</th>
               </tr>
+              {% for s in game.highscores.all %}
               <tr>
-                <td>{{ score.player_name }}</td>
-                <td>{{ score.score }}</td>
+                <td>{{forloop.counter}}.</td>
+                <td>{{ s.player_name }}</td>
+                <td>{{ s.score }}</td>
               </tr>
+              {% endfor %}
             </table>
           </div>
         </div>

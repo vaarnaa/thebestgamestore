@@ -33,6 +33,7 @@ class DeveloperSignUpForm(UserCreationForm):
         developer = Developer.objects.create(user=user)
         return user"""
 
+
 class AddGameForm(forms.ModelForm):
     class Meta:
         model = Game

@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator
+from decimal import *
 
 class User(AbstractUser):
     is_player = models.BooleanField(default=False)
@@ -36,7 +38,7 @@ class Game(models.Model):
     url = models.URLField()
     name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(max_length=255, db_index=True, unique=True)
-    price =  models.DecimalField(max_digits=10, decimal_places=2)
+    price =  models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
     image = models.ImageField(upload_to='games/%Y/%m/%d', blank=True)
     description = models.TextField()
 
@@ -108,6 +110,10 @@ class Highscore(models.Model):
 
     def player_name(self):
         return self.player.username()
+
+    class Meta:
+        ordering = ('-score',)
+
 
 class Gamestate(models.Model):
     game = models.OneToOneField(Game, on_delete=models.CASCADE, primary_key=True)
