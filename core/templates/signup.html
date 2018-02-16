@@ -7,11 +7,12 @@
 </script>
 <div class="container">
   <h1>Signup</h1>
+  </br>
   {% if user.is_authenticated %}
     <p>You're logged in. Please <a href="{% url 'logout' %}">log out</a> before signing up for a new account.</p>
   {% else %}
-    <p> Sign up as <a href="{% url 'player_signup' %}">player</a></p>
-    <p> Sign up as <a href="{% url 'developer_signup' %}">developer</a></p>
+    <p> Sign up as <a href="{% url 'player_signup' %}" class="btn btn-primary" role="button">player</a></p>
+    <p> Sign up as <a href="{% url 'developer_signup' %}"class="btn btn-success" role="button">developer</a></p>
   {% endif %}
 </div>
 {% endblock %}
