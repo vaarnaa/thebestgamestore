@@ -39,3 +39,24 @@
 .jumbotron .lang-logo img {
     max-width: 100%
 }
+
+#title {
+    width: 80%;
+    max-width: 500px;
+    margin: 0px auto;
+    height:auto;
+    overflow:auto;
+}
+
+.logo {
+    width: 100%;
+    height:auto;
+    margin: 0px 0px 60px 0px;
+    padding: 70px 0px 20px 0px;
+}
+
+.logo img {
+    width: 100%;
+    height:auto;
+    border: 0;
+}
