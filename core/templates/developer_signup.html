@@ -10,7 +10,7 @@
     <p>You're logged in. Please <a href="{% url 'logout' %}">log out</a> before signing up for a new account.</p>
   {% else %}
   <h3>Developer sign up</h3>
-  <div style="width:30%; margin: 0 auto">
+  <div class="signup" style="margin: 0 auto">
     <form method="post">
       {%csrf_token%}
       {% for error in form.non_field_errors %}

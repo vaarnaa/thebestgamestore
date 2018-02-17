@@ -409,3 +409,13 @@ ul.errorlist {
     height:auto;
     border: 0;
 }
+
+.signup {
+  width: 30%;
+}
+
+@media only screen and (max-width: 800px) {
+    .signup {
+        width: 250px;
+    }
+}
