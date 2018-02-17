@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-
+{% load static %}
 
 {% block content %}
   <script>
@@ -9,7 +9,7 @@
   </script>
 
   <div id="title">
-    <div class="logo"><img src="media/HeaderText4.svg" alt="Title The Best Game Store"></div>
+    <div class="logo"><img src="{% static "media/HeaderText4.svg" %}" alt="Title The Best Game Store"></div>
   </div>
 
   <div class="row">
