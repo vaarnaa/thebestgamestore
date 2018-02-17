@@ -5,13 +5,16 @@
 <script>
   $("#signup").attr('class', 'active');
 </script>
-<div class="container">
-  <h1>Signup</h1>
-  </br>
+<div class="container" style="text-align:center">
   {% if user.is_authenticated %}
-    <p>You're logged in. Please <a href="{% url 'logout' %}">log out</a> before signing up for a new account.</p>
+    </br>
+    <p>You're logged in. Please <a href="{% url 'logout' %}" class="btn btn-primary" role="button">log out</a> before signing up for a new account.</p>
   {% else %}
-    <p> Sign up for a <a href="{% url 'player_signup' %}" class="btn btn-primary" role="button">player</a> or <a href="{% url 'developer_signup' %}"class="btn btn-success" role="button">developer</a> account</p>
+    <h2>Sign up for</h2>
+    </br>
+    <div style="width:30%; margin: 0 auto">
+      <p><a href="{% url 'player_signup' %}" class="btn btn-primary" role="button">Player account</a>  or  <a href="{% url 'developer_signup' %}"class="btn btn-success" role="button">Developer account</a></p>
+    </div>
     <!--<p> Sign up as <a href="{% url 'developer_signup' %}"class="btn btn-success" role="button">developer</a></p>-->
   {% endif %}
 </div>
