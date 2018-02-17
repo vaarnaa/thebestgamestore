@@ -318,39 +318,74 @@ ul.errorlist {
     width:120px;
 }
 
-.navbar-brand {
-    color: rgb(210, 210, 210);
-}
+.navbar-inverse {
+   background-color: rgb(24, 86, 164);
+   background-image: none;
+   border-color: rgb(24, 86, 164);
+ }
 
-.navbar-brand.active {
+.navbar-inverse .navbar-nav>.active>a:hover,.navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus {
+   background-color: rgb(24, 86, 164);
+ }
+
+.navbar-inverse .navbar-nav>.active>a,.navbar-inverse .navbar-nav>.open>a,.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover,.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus {
+   background-color: rgb(60, 60, 145);
+ }
+
+.dropdown-menu {
+   background-color: white;
+ }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
+   background-color: rgb(66, 139, 202);
+   background-image: none;
+ }
+
+.navbar-inverse .navbar-brand {
+   color: rgb(210, 210, 210);
+ }
+
+.navbar-inverse .navbar-brand:hover {
+   color: white;
+ }
+
+.navbar-inverse .navbar-nav>li>a {
+   color: rgb(210, 210, 210);
+ }
+
+.navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus {
+   color: white;
+ }
+
+.navbar-inverse .navbar-nav>.active>a,.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus {
+   color: white;
+ }
+
+.navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>.active>a:focus {
+   color: white;
+ }
+
+.dropdown-menu>li>a {
+   color: rgb(51, 51, 51);
+ }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
+   color: white;
+ }
+
+.navbar-inverse .navbar-nav>.dropdown>a .caret {
+   border-top-color: #999999;
+   border-bottom-color: #999999;
+ }
+
+.navbar-inverse .navbar-nav>.dropdown>a:hover .caret {
+   border-top-color: white;
+   border-bottom-color: white;
+ }
+
+.navbar-inverse .navbar-brand.active {
   color: white;
 }
-
-.navbar-custom {
-    background-color: rgb(24, 86, 164);
-}
-
-.nav.navbar-nav.navbar-right li a {
-    color: rgb(210, 210, 210);
-    background-color: rgb(24, 86, 164);
-}
-
-.nav.navbar-nav.navbar-right li a:hover {
-    color: white;
-    background-color: rgb(24, 86, 164);
-}
-
-.active li a{
-    color: white;
-}
-
-.dropdown.dropdown-toggle li a:hover, .dropdown.dropdown-toggle li a:focus, .dropdown.dropdown-toggle li a:active {
-   background-color: rgb(24, 86, 164);
-}
-
-.navbar-nav > li > .dropdown-menu {
-  background-color: rgb(24, 86, 164);
- }
 
 
 
