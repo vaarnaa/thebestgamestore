@@ -116,11 +116,11 @@ class Highscore(models.Model):
 
 
 class Gamestate(models.Model):
-    game = models.OneToOneField(Game, on_delete=models.CASCADE, primary_key=True)
-    player = models.ForeignKey(Player,
+    game = models.ForeignKey(Game,
                                related_name='gamestate',
                                null=True,
                                on_delete=models.SET_NULL)
+    player = models.OneToOneField(Player, on_delete=models.CASCADE, primary_key=True) 
     data = models.TextField()
 
     def player_name(self):

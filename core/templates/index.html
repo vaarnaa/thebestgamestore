@@ -5,10 +5,14 @@
 {% block content %}
   <script>
     $("#index").attr('class', 'navbar-brand active');
+    $( "div#title" ).removeClass( "container" )
   </script>
+
+  <div id="title">
+    <div class="logo"><img src="media/HeaderText4.svg" alt="Title The Best Game Store"></div>
+  </div>
+
   <div class="row">
-
-
     <div class="col-lg-2">
       <ul class="nav nav-pills nav-stacked">
         <li role="presentation" {% if not category %}class="active"{% endif %}>  <a href="{% url "core:index" %}">All</a></li>
