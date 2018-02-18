@@ -5,11 +5,24 @@
 <script>
   $("#add_games").attr('class', 'active');
 </script>
-    <h1>Add game</h1>
-
-    <form action="{% url 'add_game' %}"method="post" enctype="multipart/form-data" class="order-form">
+  <div class="container">
+    <div  class="center-block signup" style="text-align:left">
+      <h2 style="text-align: center; margin-bottom: 50px;">Add game</h2>
+      <form action="{% url 'add_game' %}"method="post" name="AddGameForm" enctype="multipart/form-data" class="form-horizontal form">
+        {% for error in form.non_field_errors %}
+          <div class="form-group has-errors text-danger" style="margin: 0 auto;">
+            {{error}}
+          </div>
+          </br>
+        {% endfor %}
         {{ form.as_p }}
+        <!--<button type="submit" class="btn btn-success" style="width:100%">Add game</button>-->
         <p><input type="submit" value="Add game"></p>
         {% csrf_token %}
-    </form>
+      </form>
+    </div>
+    </br>
+    </br>
+    </br>
+  </div>
 {% endblock %}
