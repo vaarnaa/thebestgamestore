@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
+from datetime import datetime
+
 
 class User(AbstractUser):
     is_player = models.BooleanField(default=False)
@@ -110,12 +112,17 @@ class Highscore(models.Model):
         return self.player.username()
 
 class Gamestate(models.Model):
-    game = models.ForeignKey(Game,
+    DEFAULT_PK = 1
+    stateGame = models.ForeignKey(Game,
+                             related_name='gamestate',
+                             on_delete=models.SET_NULL,
+                             null=True)
+    statePlayer = models.ForeignKey(Player,
                                related_name='gamestate',
                                null=True,
-                               on_delete=models.SET_NULL)
-    player = models.OneToOneField(Player, on_delete=models.CASCADE, primary_key=True) 
-    data = models.TextField()
+                               on_delete=models.SET_NULL) 
+    gamestate = models.TextField(default="")
+    time = models.DateTimeField(default=datetime.now())
 
     def player_name(self):
         return self.player.username()

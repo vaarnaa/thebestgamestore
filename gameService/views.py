@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import get_list_or_404
 from cart.forms import CartAddGameForm
 from django.urls import reverse
-from core.models import Game, Player, Highscore
+from core.models import Game, Player, Highscore, Gamestate
 from core.views import highscores
+import json
+
 # Create your views here.
 def play(request, id):
 
@@ -46,9 +48,12 @@ def savegame(request, id):
     player = get_object_or_404(Player, user_id=request.user.id)
     game = get_object_or_404(Game, id=id)
     gamestate = request.POST['gameState']
-    Gamestate.objects.create(game=game,
-                                 player=player,
+    Gamestate.objects.create(stateGame=game,
+                                 statePlayer=player,
                                  gamestate=gamestate)
+    savegames = Gamestate.filter(stateGame=game).filter(statePlayer=player)
+    data = list(json.dumps(savegames))    
+    return JsonResponse({'savegames': data})
 
 
 

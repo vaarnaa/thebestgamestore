@@ -48,13 +48,16 @@
       if(data.messageType == "SCORE"){
         post('/play/savescore/'+ game_id , data );
       } else if(data.messageType == "SAVE"){
-        post('/play/savegame/'+ game_id , data) );
-      }
-
+            $.ajax({url: "savegame",
+                method: "POST", 
+                data: data.gamestate, 
+                dataType: 'json', 
+                success: function (data) { 
+                    alert("Saved a game" + data);
+                }
+            });
+      };
     });
-
-
-  });
 </script>
 <h1>{{ game.name }}</h1>
 <div class="embed-responsive embed-responsive-16by9">
