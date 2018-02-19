@@ -126,6 +126,10 @@ EMAIL_HOST_USER = 'thebestestgamestore@gmail.com'
 EMAIL_HOST_PASSWORD = 'strongpassword'
 EMAIL_PORT = 587
 
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY ='989899516484-06p1cmnb70noea31umlk4p5lgbajkmoe.apps.googleusercontent.com'  #Paste CLient Key
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'uTRKYO2PKErQBUa6HKkHJIG3' #Paste Secret Key
+
 AUTH_USER_MODEL = 'core.User'
 
 LOGIN_REDIRECT_URL = '/'
