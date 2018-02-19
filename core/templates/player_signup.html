@@ -5,16 +5,31 @@
 <script>
   $("#signup").attr('class', 'active');
 </script>
-<div class="container">
+<div class="container" style="text-align:center;">
   {% if user.is_authenticated %}
     <p>You're logged in. Please <a href="{% url 'logout' %}">log out</a> before signing up for a new account.</p>
   {% else %}
-    <h2>Sign up</h2>
-    <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Sign up</button>
-    </form>
+    <h3>Player sign up</h3>
+    <div class="signup" style="margin: 0 auto">
+      <form method="post">
+        {%csrf_token%}
+        {% for error in form.non_field_errors %}
+          <div class="form-group has-errors text-danger small">
+            {{error}}
+          </div>
+        {% endfor %}
+        {% for field in form %}
+          <div class="form-group has-errors text-danger small">
+            {{field.errors}}
+          </div>
+          <div class="form-group has-errors text-danger small"></div>
+          <div class="form-group">
+            {{field}}
+          </div>
+        {% endfor %}
+        <button class="btn btn-primary" style="width: 100%;">Sign up</button>
+      </form>
+    </div>
   {% endif %}
 </div>
 {% endblock %}

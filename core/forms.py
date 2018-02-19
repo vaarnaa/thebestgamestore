@@ -6,6 +6,10 @@ from core.models import Player, Developer, User, Game
 
 
 class PlayerSignUpForm(UserCreationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Username'}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'Email address'}))
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Password'}))
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Password confirmation'}))
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -20,6 +24,10 @@ class PlayerSignUpForm(UserCreationForm):
         return user"""
 
 class DeveloperSignUpForm(UserCreationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Username'}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'Email address'}))
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Password'}))
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Password confirmation'}))
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -32,6 +40,7 @@ class DeveloperSignUpForm(UserCreationForm):
         user.save()
         developer = Developer.objects.create(user=user)
         return user"""
+
 
 class AddGameForm(forms.ModelForm):
     class Meta:
