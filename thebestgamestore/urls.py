@@ -20,6 +20,7 @@ urlpatterns = [
     #url(r'^login/$', auth_views.login, {'template_name': 'core/login.html', 'authentication_form': LoginForm}, name='login'),
     url(r'^login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/login'}, name="logout"),
+    url(r'^oauth/', include('social_django.urls', namespace='social')),
     url(r'^games', core.views.games, name='games'),
     url(r'^add_games', core.views.add_games, name='add_games'),
     url(r'^added', core.views.add_game, name='add_game'),
