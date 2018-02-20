@@ -126,6 +126,7 @@ EMAIL_HOST_USER = 'thebestestgamestore@gmail.com'
 EMAIL_HOST_PASSWORD = 'strongpassword'
 EMAIL_PORT = 587
 
+SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = ['user_type', 'backend_name']
 
 SOCIAL_AUTH_PIPELINE = (
     # Get the information we can about the user and return it in a simple
@@ -160,11 +161,14 @@ SOCIAL_AUTH_PIPELINE = (
     # specified by settings (and the default ones like access_token, etc).
     'social_core.pipeline.social_auth.load_extra_data',
 
+
+    'core.social_functions.collect_user_type',
     # Update the user record with any changed info from the auth service.
     'social_core.pipeline.user.user_details',
 
     #'home.pipeline.save_profile',
-    'core.social_functions.create_player',
+    #'core.social_functions.collect_user_type'
+    #'core.social_functions.create_player',
     )
 
 
@@ -172,6 +176,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY ='989899516484-06p1cmnb70noea31umlk4p5lgbajkmoe.ap
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'uTRKYO2PKErQBUa6HKkHJIG3' #Paste Secret Key
 
 AUTH_USER_MODEL = 'core.User'
+SOCIAL_AUTH_USER_MODEL = 'core.User'
 
 LOGIN_REDIRECT_URL = '/'
 

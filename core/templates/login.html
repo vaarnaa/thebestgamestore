@@ -6,7 +6,6 @@
 <script>
   $("#login").attr('class', 'active');
 </script>
-<div class="container">
   <div style="text-align:center">
     {% if next %}
 
@@ -31,7 +30,7 @@
         <div class="form-group has-errors text-danger" style="margin: 0 auto;">
           {{error}}
         </div>
-        </br>
+        <br>
       {% endfor %}
       <div class="control-group">
         <label class="control-label" for="username">Username</label>
@@ -53,8 +52,8 @@
       </div>
     </form>
   </div>
-  </br>
-  <p style="margin: 0px 0 5px 0;"><strong>-- OR --</strong></p>
+  <br>
+  <p style="margin: 0px 0 5px 0;"><strong> or </strong></p>
   <a id="google-signin" href="{% url 'social:begin' 'google-oauth2' %}"><img alt="Google Sign In" src="{% static "media/btn_google_signin_light_normal_web.png" %}"></a>
   <br>
   <br>

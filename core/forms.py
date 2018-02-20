@@ -4,6 +4,14 @@ from django.db import transaction
 
 from core.models import Player, Developer, User, Game
 
+class SelectUserTypeForm(forms.Form):
+    CHOICES = (
+        ('1','player'),
+        ('2','developer'),
+    )
+    select = forms.ChoiceField(widget=forms.Select, choices=CHOICES)
+
+
 class PriceUpdateForm(forms.Form):
     new_price = forms.IntegerField(widget=forms.TextInput(attrs={'name': 'new_price'}))
 

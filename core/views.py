@@ -2,12 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login as auth_login, authenticate
 from django.views.generic import CreateView
-from .forms import PlayerSignUpForm, DeveloperSignUpForm, AddGameForm, PriceUpdateForm
+from .forms import PlayerSignUpForm, DeveloperSignUpForm, AddGameForm, SelectUserTypeForm
 from .models import User, Game, Category, Player, Developer, Highscore
 from django.shortcuts import get_object_or_404
 from django.shortcuts import get_list_or_404
 from cart.forms import CartAddGameForm
-from django.urls import reverse
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
@@ -15,6 +14,29 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
+from django.urls import reverse
+
+
+def get_user_type(request):
+    if request.method == 'POST':
+        form = SelectUserTypeForm(request.POST)
+        if form.is_valid():
+            # because of FIELDS_STORED_IN_SESSION, this will get copied
+            # to the request dictionary when the pipeline is resumed
+            request.session['user_type'] = 'player'#form.cleaned_data['select']
+            #backend = current_partial.backend
+            # once we have the password stashed in the session, we can
+            # tell the pipeline to resume by using the "complete" endpoint
+            #return redirect(reverse('oauth/complete/google-oauth2/')) google-auth2
+            #return redirect(reverse('social:complete', args=("backend_name,")))
+            backend = request.session['backend_name']
+            return redirect('social:complete', backend=backend)
+            #return redirect(reverse('social:complete', args=("google-auth2,")))
+            #return redirect(reverse('/oauth/complete/google-oauth2/'))
+            #return redirect('/oauth/complete/google-auth2')
+    else:
+        form = SelectUserTypeForm()
+    return render(request, "usertype_form.html", {'form': form})
 
 
 def player_signup(request):

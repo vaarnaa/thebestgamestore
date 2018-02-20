@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^highscores', core.views.highscores, name='highscores'),
     url(r'^player_highscores', core.views.player_highscores, name='player_highscores'),
     path('signup/', core.views.signup, name='signup'),
+    path('signup/select_user_type/', core.views.get_user_type, name='usertype'),
     #path('signup/player', core.views.PlayerSignUp.as_view(), name='player_signup'),
     path('signup/player', core.views.player_signup, name='player_signup'),
     #path('signup/developer', core.views.DeveloperSignUp.as_view(), name='developer_signup'),
