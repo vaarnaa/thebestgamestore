@@ -7,16 +7,19 @@
 </script>
 <div class="container" style="text-align:center">
   {% if user.is_authenticated %}
-    </br>
+    <br>
     <p>You're logged in. Please <a href="{% url 'logout' %}" class="btn btn-primary" role="button">log out</a> before signing up for a new account.</p>
   {% else %}
     <h2>Sign up for</h2>
-    </br>
-    <div text-center>
+    <br>
+    <div>
       <p style="padding-bottom: 5px;"><a style="min-width: 200px;" href="{% url 'player_signup' %}" class="btn btn-primary" role="button">Player account</a></p>
-      <p><a style="min-width: 200px;" href="{% url 'developer_signup' %}"class="btn btn-success" role="button">Developer account</a></p>
+      <p><a style="min-width: 200px;" href="{% url 'developer_signup' %}" class="btn btn-success" role="button">Developer account</a></p>
     </div>
-    <!--<p> Sign up as <a href="{% url 'developer_signup' %}"class="btn btn-success" role="button">developer</a></p>-->
+    <p style="margin: 15px 0 5px 0;"><strong>-- OR --</strong></p>
+    <a id="google-signin" href="{% url 'social:begin' 'google-oauth2' %}"><img alt="Google Sign In" src="{% static "media/btn_google_signin_light_normal_web.png" %}"></a>
+    <br>
+    <br>
   {% endif %}
 </div>
 {% endblock %}
