@@ -11,8 +11,6 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 
 
-
-
 @csrf_exempt
 def payment_done(request):
     if request.GET['result'] == 'success':
@@ -26,9 +24,10 @@ def payment_done(request):
         games = []
         for item in items:
             player.games.add(item.game)
+            item.game.times_bought += 1
             games.append(item.game)
+            item.game.save()
         player.save()
-
 
         mail_subject = 'Thank you for your purchase!'
         message = render_to_string('payments/done_email.html', {
@@ -49,18 +48,15 @@ def payment_done(request):
     else:
         return render(request, 'payments/canceled.html')
 
+
 @csrf_exempt
 def payment_canceled(request):
     return render(request, 'payments/canceled.html')
+
+
 @csrf_exempt
 def payment_error(request):
     return render(request, 'payments/error.html')
-
-def checksum(pid, sid, amount, token):
-    checksumstr = "pid={}&sid={}&amount={}&token={}".format(pid, sid, amount, settings.SECRET_KEY)
-    m = md5(checksumstr.encode("ascii"))
-    checksum = m.hexdigest()
-
 
 
 def payment_process(request):

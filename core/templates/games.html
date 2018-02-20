@@ -37,7 +37,7 @@
   <div class="row">
     {% for game in games %}
     <div class="col-sm-4 col-md-4">
-      <div class="thumbnail">
+      <div style="height:500px; overflow-y: auto;" class="thumbnail">
         <a href="{{ game.get_absolute_url }}">
             <img src="{% if game.image %}{{ game.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}" height="400" width="500">
         </a>

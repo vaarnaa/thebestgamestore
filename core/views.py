@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login as auth_login, authenticate
 from django.views.generic import CreateView
-from .forms import PlayerSignUpForm, DeveloperSignUpForm, AddGameForm
+from .forms import PlayerSignUpForm, DeveloperSignUpForm, AddGameForm, PriceUpdateForm
 from .models import User, Game, Category, Player, Developer, Highscore
 from django.shortcuts import get_object_or_404
 from django.shortcuts import get_list_or_404
 from cart.forms import CartAddGameForm
+from django.urls import reverse
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
@@ -148,10 +149,12 @@ def game_detail(request, id, slug):
     elif the_user.is_authenticated and the_user.is_developer:
         dev = get_object_or_404(Developer, user_id=the_user.id)
         games = dev.games.all()
+        form = PriceUpdateForm()
         if game in games:
             return render(request,
                         'game/detail_dev.html',
-                        {'game': game})
+                        {'game': game,
+                         'form': form})
         else:
             return render(request,
                         'game/detail.html',
@@ -238,6 +241,25 @@ def remove_game(request):
         return render(request, 'game/removed.html', {'game_name': name})
     else:
         return render(request, 'index.html')
+
+
+def update_price(request):
+    id = request.POST['id']
+    game = get_object_or_404(Game, id=id)
+    uid = request.user.id
+    dev = get_object_or_404(Developer, user_id=uid)
+    games = dev.games.all()
+    form = PriceUpdateForm()
+    if game in games:
+        game.price = request.POST['new_price']
+        game.save()
+        return render(request,
+                    'game/detail_dev.html',
+                    {'game': game,
+                     'form': form})
+    else:
+        return render(request, 'index.html')
+
 
 def highscores(request):
     games = Game.objects.all()

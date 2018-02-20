@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^add_games', core.views.add_games, name='add_games'),
     url(r'^added', core.views.add_game, name='add_game'),
     url(r'^remove_game', core.views.remove_game, name='remove_game'),
+    url(r'^update_price', core.views.update_price, name='update_price'),
     url(r'^highscores', core.views.highscores, name='highscores'),
     url(r'^player_highscores', core.views.player_highscores, name='player_highscores'),
     path('signup/', core.views.signup, name='signup'),

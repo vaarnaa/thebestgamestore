@@ -42,6 +42,7 @@ class Game(models.Model):
     price =  models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
     image = models.ImageField(upload_to='games/%Y/%m/%d', blank=True)
     description = models.TextField()
+    times_bought = models.PositiveIntegerField(default=0)
 
     def get_short_description(self):
         length = len(self.description)
@@ -125,7 +126,7 @@ class Gamestate(models.Model):
     statePlayer = models.ForeignKey(Player,
                                related_name='gamestate',
                                null=True,
-                               on_delete=models.SET_NULL) 
+                               on_delete=models.SET_NULL)
     gamestate = models.TextField(default="")
     time = models.DateTimeField(default=datetime.now())
 

@@ -4,6 +4,9 @@ from django.db import transaction
 
 from core.models import Player, Developer, User, Game
 
+class PriceUpdateForm(forms.Form):
+    new_price = forms.IntegerField(widget=forms.TextInput(attrs={'name': 'new_price'}))
+
 
 class PlayerSignUpForm(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Username'}))
