@@ -6,10 +6,10 @@ from core.models import Player, Developer, User, Game
 
 class SelectUserTypeForm(forms.Form):
     CHOICES = (
-        ('1','player'),
-        ('2','developer'),
+        ('player','player'),
+        ('developer','developer'),
     )
-    select = forms.ChoiceField(widget=forms.Select, choices=CHOICES)
+    select = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect) #widget=forms.Select,
 
 
 class PriceUpdateForm(forms.Form):

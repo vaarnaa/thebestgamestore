@@ -21,19 +21,17 @@ def get_user_type(request):
     if request.method == 'POST':
         form = SelectUserTypeForm(request.POST)
         if form.is_valid():
+
             # because of FIELDS_STORED_IN_SESSION, this will get copied
             # to the request dictionary when the pipeline is resumed
-            request.session['user_type'] = 'player'#form.cleaned_data['select']
-            #backend = current_partial.backend
-            # once we have the password stashed in the session, we can
-            # tell the pipeline to resume by using the "complete" endpoint
-            #return redirect(reverse('oauth/complete/google-oauth2/')) google-auth2
-            #return redirect(reverse('social:complete', args=("backend_name,")))
+            data = form.cleaned_data['select'] #'player'
+            #print(data)
+            request.session['user_type'] = data
             backend = request.session['backend_name']
+
+            # once we have the user_type stashed in the session, we can
+            # tell the pipeline to resume by using the "complete" endpoint
             return redirect('social:complete', backend=backend)
-            #return redirect(reverse('social:complete', args=("google-auth2,")))
-            #return redirect(reverse('/oauth/complete/google-oauth2/'))
-            #return redirect('/oauth/complete/google-auth2')
     else:
         form = SelectUserTypeForm()
     return render(request, "usertype_form.html", {'form': form})
