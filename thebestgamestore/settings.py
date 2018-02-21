@@ -151,6 +151,9 @@ SOCIAL_AUTH_PIPELINE = (
     # there's any collision.
     'social_core.pipeline.user.get_username',
 
+    # Collect user type player/developer to session dictionary
+    'core.social_functions.collect_user_type',
+
     # Create a user account if we haven't found one yet.
     'social_core.pipeline.user.create_user',
 
@@ -161,14 +164,11 @@ SOCIAL_AUTH_PIPELINE = (
     # specified by settings (and the default ones like access_token, etc).
     'social_core.pipeline.social_auth.load_extra_data',
 
+    # Associate player/developer account with user based on usertype collected to session dictionary
+    'core.social_functions.make_user_by_type',
 
-    'core.social_functions.collect_user_type',
     # Update the user record with any changed info from the auth service.
     'social_core.pipeline.user.user_details',
-
-    #'home.pipeline.save_profile',
-    #'core.social_functions.collect_user_type'
-    #'core.social_functions.create_player',
     )
 
 
