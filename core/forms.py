@@ -6,8 +6,8 @@ from core.models import Player, Developer, User, Game
 
 class SelectUserTypeForm(forms.Form):
     CHOICES = (
-        ('player','player'),
-        ('developer','developer'),
+        ('player','Player'),
+        ('developer','Developer'),
     )
     select = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
 
