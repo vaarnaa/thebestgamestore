@@ -25,12 +25,12 @@ def get_user_type(request):
             # because of FIELDS_STORED_IN_SESSION, this will get copied
             # to the request dictionary when the pipeline is resumed
             data = form.cleaned_data['select'] #'player'
-            print(data)
+            #print(data)
             request.session['user_type'] = data
+            backend = request.session['backend_name']
 
             # once we have the user_type stashed in the session, we can
             # tell the pipeline to resume by using the "complete" endpoint
-            backend = request.session['backend_name']
             return redirect('social:complete', backend=backend)
     else:
         form = SelectUserTypeForm()

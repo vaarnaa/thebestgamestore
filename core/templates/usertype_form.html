@@ -5,11 +5,24 @@
 <script>
   $("#signup").attr('class', 'active');
 </script>
-<div style="text-align: center;">
+
+<h3 style="text-align:center;">Select account type</h3>
+<div  class="center-block signup" style="text-align:left">
   <form method="post">
       {% csrf_token %}
-      {{form.as_p}}
-      <input type="submit" value="Submit" />
+      <br>
+      <br>
+      <div class="text-center" data-toggle="buttons">
+        {% for field in form %}
+          {% for item in field %}
+          <div class="btn btn-default target">
+            {{item}}
+          </div>
+          <br>
+          {% endfor %}
+        {% endfor %}
+      </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; margin-top: 10px;">Submit</button>
   </form>
   </br>
   </br>
