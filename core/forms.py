@@ -9,7 +9,7 @@ class SelectUserTypeForm(forms.Form):
         ('player','player'),
         ('developer','developer'),
     )
-    select = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect) #widget=forms.Select,
+    select = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
 
 
 class PriceUpdateForm(forms.Form):
