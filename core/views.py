@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login as auth_login, authenticate
 from django.views.generic import CreateView
-from .forms import PlayerSignUpForm, DeveloperSignUpForm, AddGameForm, SelectUserTypeForm
+from .forms import PlayerSignUpForm, DeveloperSignUpForm, AddGameForm, SelectUserTypeForm, PriceUpdateForm
 from .models import User, Game, Category, Player, Developer, Highscore
 from django.shortcuts import get_object_or_404
 from django.shortcuts import get_list_or_404
