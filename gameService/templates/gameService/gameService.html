@@ -49,14 +49,15 @@
         post('/play/savescore/'+ game_id , data );
       } else if(data.messageType == "SAVE"){
             $.ajax({url: "savegame",
-                method: "POST", 
-                data: data.gamestate, 
-                dataType: 'json', 
-                success: function (data) { 
+                method: "POST",
+                data: data.gamestate,
+                dataType: 'json',
+                success: function (data) {
                     alert("Saved a game" + data);
                 }
             });
       };
+    });
     });
 </script>
 <h1>{{ game.name }}</h1>
