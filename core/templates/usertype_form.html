@@ -7,22 +7,23 @@
 </script>
 
 <h3 style="text-align:center;">Select account type</h3>
-<div  class="center-block signup" style="text-align:left">
+<div  class="center-block signup2" style="text-align:left">
   <form method="post">
       {% csrf_token %}
-      <br>
       <br>
       <div class="text-center" data-toggle="buttons">
         {% for field in form %}
           {% for item in field %}
-          <div class="btn btn-default target">
+          <div class="btn btn-default">
             {{item}}
           </div>
           <br>
           {% endfor %}
         {% endfor %}
       </div>
-        <button type="submit" class="btn btn-primary" style="width:100%; margin-top: 10px;">Submit</button>
+      <!--<button type="submit" class="btn btn-primary" style="width:100%; margin-top: 10px;">Submit</button>-->
+      <input type="submit" class="btn btn-primary usersubmit"/>
+
   </form>
   </br>
   </br>

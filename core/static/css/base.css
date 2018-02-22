@@ -437,15 +437,25 @@ color: #7AA3CC;
 }*/
 
 .btn.btn-default {
-  margin-bottom: 10px;
+  margin-bottom: 10px ;
+  padding: 9px 4px 4px 4px;
   width: 150px;
   background: rgb(250, 250, 250);
-  border: 1px solid grey;
-
+  border: 1px solid rgb(200, 200, 200);
+  font-size: 1.1em;
+  font-family: Arial, sans-serif;
+  font-weight: normal;
+  font
 }
 
 .btn.btn-default:hover {
-  background: rgb(220, 220, 220);
+  background: rgb(230, 230, 230);
+  border: 1px solid rgb(150, 150, 150);
+}
+
+.btn.btn-primary.usersubmit {
+  width:100%;
+  margin-top: 10px;
 }
 
 #google-signin img {
@@ -460,6 +470,10 @@ color: #7AA3CC;
 
 .signup {
   width: 30%;
+}
+
+.signup2 {
+  width: 150px;
 }
 
 @media only screen and (max-width: 800px) {
