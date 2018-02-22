@@ -256,7 +256,7 @@ def add_game(request):
                 slugger = slugger  + str(i)
                 while Game.objects.filter(slug=slugger):
                     i += 1
-                    slugger = slugger  + str(i)
+                    slugger = slugger[:-1]  + str(i)
 
             img = 'no_image.png'   # Default image if no image is given.
             if request.FILES.get('image',False):
