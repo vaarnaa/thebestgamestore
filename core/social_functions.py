@@ -44,7 +44,7 @@ def collect_user_type(strategy, request, backend, details, user=None, is_new=Fal
 
     # if user created but not associated with type redirect to usertype selection view
     if user:
-        if not user.is_player or not user.is_developer:
+        if not (user.is_player or user.is_developer):
             return redirect(get_user_type)
 
     # continue the pipeline
