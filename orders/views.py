@@ -10,6 +10,9 @@ from .tasks import order_created
 from cart.cart import Cart
 
 
+"""
+Creates an order to the database.
+"""
 def order_create(request):
     cart = Cart(request)
     if request.method == 'POST':
@@ -21,13 +24,13 @@ def order_create(request):
                                          game=item['game'],
                                          price=item['price'],
                                          quantity=item['quantity'])
-            # clear the cart
+            # Clear the cart
             cart.clear()
-            # launch asynchronous task
-            #order_created.delay(order.id)
-            # set the order in the session
+
+
+            # Set the order in the session
             request.session['order_id'] = order.id
-            # redirect to the payment
+            # Redirect to the payment
             return redirect(reverse('payments:process'))
     else:
         form = OrderCreateForm()

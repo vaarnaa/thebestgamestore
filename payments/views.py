@@ -11,6 +11,10 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 
 
+"""
+Renders the view for succesful payment and adds the game to the players inventory.
+Also sends a confirmation email to the user of the completed purchase.
+"""
 @csrf_exempt
 def payment_done(request):
     if request.GET['result'] == 'success':
@@ -29,6 +33,7 @@ def payment_done(request):
             item.game.save()
         player.save()
 
+        # The confirmation email.
         mail_subject = 'Thank you for your purchase!'
         message = render_to_string('payments/done_email.html', {
             'user': request.user,
@@ -49,16 +54,25 @@ def payment_done(request):
         return render(request, 'payments/canceled.html')
 
 
+"""
+Renders the canceled payment page.
+"""
 @csrf_exempt
 def payment_canceled(request):
     return render(request, 'payments/canceled.html')
 
-
+"""
+Renders the error -page when there is an error with the payment
+"""
 @csrf_exempt
 def payment_error(request):
     return render(request, 'payments/error.html')
 
 
+"""
+Processes the payment of the order. Creates the values for the post message needed
+for the mockup payment size.
+"""
 def payment_process(request):
     order_id = request.session.get('order_id')
     order = get_object_or_404(Order, id=order_id)
@@ -70,6 +84,7 @@ def payment_process(request):
     m = md5(checksumstr.encode("ascii"))
     checksum = m.hexdigest()
 
+    # Inputs for the POST -message.
     payment_details = {
         'pid':          pid,
         'sid':          sid,

@@ -6,7 +6,7 @@
   $("#add_games").attr('class', 'active');
 </script>
     <div class="game-detail">
-        <img src="{% if game.image %}{{ game.image.url }}{% else %}{% static "no_image.png" %}{% endif %}">
+        <img src="{% if game.image %}{{ game.image.url }}{% else %}{% static "media/no_image.png" %}{% endif %}">
         <h1>Added {{ game.name }}</h1>
         <h2><a href="{{ game.category.get_absolute_url }}">{{ game.category }}</a></h2>
         <p class="price">{{ game.price }} €</p>

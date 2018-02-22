@@ -4,7 +4,9 @@ from core.models import Game
 from .cart import Cart
 from .forms import CartAddGameForm
 
-
+"""
+Adds a game to the shopping cart.
+"""
 @require_POST
 def cart_add(request, game_id):
     cart = Cart(request)
@@ -17,14 +19,18 @@ def cart_add(request, game_id):
                  update_quantity=True)
     return redirect('cart:cart_detail')
 
-
+"""
+Removes a game from the shopping cart.
+"""
 def cart_remove(request, game_id):
     cart = Cart(request)
     game = get_object_or_404(Game, id=game_id)
     cart.remove(game)
     return redirect('cart:cart_detail')
 
-
+"""
+Lists the games in the shopping cart.
+"""
 def cart_detail(request):
     cart = Cart(request)
     for item in cart:

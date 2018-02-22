@@ -148,15 +148,21 @@ def developer_activate(request, uidb64, token):
 
 
 
+"""
+Renders the view with the details of the selected game.
+"""
 
 def game_detail(request, id, slug):
     game = get_object_or_404(Game, id=id, slug=slug)
     cart_game_form = CartAddGameForm()
     the_user = request.user
+
+    # Different view for player.
     if the_user.is_authenticated and the_user.is_player:
         player = get_object_or_404(Player, user_id=the_user.id)
         games = player.games.all()
-        if game in games:
+
+        if game in games:   #Checking if the user owns the game in question.
             return render(request,
                         'game/detail_owned.html',
                         {'game': game})
@@ -165,12 +171,12 @@ def game_detail(request, id, slug):
                         'game/detail.html',
                         {'game': game,
                         'cart_game_form': cart_game_form})
-
+    # Different view for developer.
     elif the_user.is_authenticated and the_user.is_developer:
         dev = get_object_or_404(Developer, user_id=the_user.id)
         games = dev.games.all()
         form = PriceUpdateForm()
-        if game in games:
+        if game in games:   #Checking if the user owns the game in question.
             return render(request,
                         'game/detail_dev.html',
                         {'game': game,
@@ -180,13 +186,18 @@ def game_detail(request, id, slug):
                         'game/detail.html',
                         {'game': game,
                         'cart_game_form': cart_game_form})
-
+    # Different view if the user is not authenticated.
     else:
         return render(request,
                     'game/detail.html',
                     {'game': game,
                     'cart_game_form': cart_game_form})
-# Create your views here.
+
+
+
+"""
+Renders the front page of the webshop. Lists all available games under their categories.
+"""
 def index(request, category_slug=None):
     category = None
     categories = Category.objects.all()
@@ -200,87 +211,119 @@ def index(request, category_slug=None):
 
 
 
-
+"""
+Renders the view for "My games" -page. Lists the games owned.
+"""
 def games(request):
     uid = request.user.id
     games = None
-    if request.user.is_player:
+    # Different view for player.
+    if request.user.is_authenticated and request.user.is_player:
         player = get_object_or_404(Player, user_id=uid)
         games = player.games.all()
-    elif request.user.is_developer:
+        return render(request, 'games.html', {'games': games})
+    # Different view for developer.
+    elif request.user.is_authenticated and request.user.is_developer:
         dev = get_object_or_404(Developer, user_id=uid)
         games = dev.games.all()
-    return render(request, 'games.html', {'games': games})
+        return render(request, 'games.html', {'games': games})
+    # Redirects to frontpage.
+    else:
+        return redirect('core:index')
 
-
+"""
+Renders the "add game" -page for developers.
+"""
 def add_games(request):
-    form = AddGameForm()
-    return render(request, 'add_games.html', {'form': form })
+    if request.user.is_authenticated and request.user.is_developer:
+        form = AddGameForm()
+        return render(request, 'add_games.html', {'form': form })
+    else:
+        return redirect('core:index')
 
-
-
-
+"""
+Adds a new game on the webshop, and renders a confirmation view.
+"""
 def add_game(request):
-    if request.method == 'POST':
-        slugger = request.POST['name'].lower().replace(' ', '-').replace('ä', 'a').replace('ö', 'o')
-        if Game.objects.filter(slug=slugger):
-            i = 1
-            slugger = slugger  + str(i)
-            while Game.objects.filter(slug=slugger):
-                i += 1
+    if request.user.is_authenticated and request.user.is_developer:
+        if request.method == 'POST':
+            # Creates a slug for the new game.
+            slugger = request.POST['name'].lower().replace(' ', '-').replace('ä', 'a').replace('ö', 'o')
+
+            # If a game with the same slug exists, adds a number after it to make it unique.
+            if Game.objects.filter(slug=slugger):
+                i = 1
                 slugger = slugger  + str(i)
+                while Game.objects.filter(slug=slugger):
+                    i += 1
+                    slugger = slugger  + str(i)
 
-        img = 'no_image.png'
-        if request.FILES.get('image',False):
-            img = request.FILES['image']
-        price = 0
-        if float(request.POST['price']) > 0:
-            price = request.POST['price']
-        game = Game.objects.create(category=get_object_or_404(Category, id=request.POST['category']),
-                            url=request.POST['url'],
-                            name=request.POST['name'],
-                            slug=slugger,
-                            price=price,
-                            image=img,
-                            description=request.POST['description'])
-        dev = get_object_or_404(Developer, user_id=request.user.id)
-        dev.games.add(game)
-        dev.save()
-    return render(request, 'game/added.html', {'game': game})
+            img = 'no_image.png'   # Default image if no image is given.
+            if request.FILES.get('image',False):
+                img = request.FILES['image']
+            price = 0
+            if float(request.POST['price']) > 0:    # Price cannot be less than 0.
+                price = request.POST['price']
+            # Adds the new game to database.
+            game = Game.objects.create(category=get_object_or_404(Category, id=request.POST['category']),
+                                url=request.POST['url'],
+                                name=request.POST['name'],
+                                slug=slugger,
+                                price=price,
+                                image=img,
+                                description=request.POST['description'])
+            dev = get_object_or_404(Developer, user_id=request.user.id)
+            dev.games.add(game)
+            dev.save()
+        return render(request, 'game/added.html', {'game': game})
+    else:
+        return redirect('core:index')
 
-
+"""
+Removes the game in question.
+"""
 def remove_game(request):
-    id = request.POST['id']
-    game = get_object_or_404(Game, id=id)
-    uid = request.user.id
-    dev = get_object_or_404(Developer, user_id=uid)
-    games = dev.games.all()
-    if game in games:
-        name = game.name
-        game.delete(keep_parents=True)
-        return render(request, 'game/removed.html', {'game_name': name})
+    if request.method == 'POST' and request.user.is_authenticated and request.user.is_developer:
+        id = request.POST['id']
+        game = get_object_or_404(Game, id=id)
+        uid = request.user.id
+        dev = get_object_or_404(Developer, user_id=uid)
+        games = dev.games.all()
+        if game in games:
+            name = game.name
+            game.delete(keep_parents=True)
+            return render(request, 'game/removed.html', {'game_name': name})
+        else:
+            return redirect('core:index')
     else:
-        return render(request, 'index.html')
+        return redirect('core:index')
 
-
+"""
+Updates the price of the given game.
+"""
 def update_price(request):
-    id = request.POST['id']
-    game = get_object_or_404(Game, id=id)
-    uid = request.user.id
-    dev = get_object_or_404(Developer, user_id=uid)
-    games = dev.games.all()
-    form = PriceUpdateForm()
-    if game in games:
-        game.price = request.POST['new_price']
-        game.save()
-        return render(request,
-                    'game/detail_dev.html',
-                    {'game': game,
-                     'form': form})
+    if request.method == 'POST' and request.user.is_authenticated and request.user.is_developer:
+        id = request.POST['id']
+        game = get_object_or_404(Game, id=id)
+        uid = request.user.id
+        dev = get_object_or_404(Developer, user_id=uid)
+        games = dev.games.all()
+        form = PriceUpdateForm()
+        if game in games:
+            game.price = request.POST['new_price']
+            game.save()
+            return render(request,
+                        'game/detail_dev.html',
+                        {'game': game,
+                         'form': form})
+        else:
+            return redirect('core:index')
     else:
-        return render(request, 'index.html')
+        return redirect('core:index')
 
-
+"""
+Renders the view for global highscores.
+"""
 def highscores(request):
     games = Game.objects.all()
     scores = []
@@ -290,6 +333,9 @@ def highscores(request):
             scores.append(game)
     return render(request, 'highscores.html', {'scores': scores})
 
+"""
+Renders the view for players own highscores.
+"""
 def player_highscores(request):
     player = get_object_or_404(Player, user_id=request.user.id)
     scores = player.highscores.all()
