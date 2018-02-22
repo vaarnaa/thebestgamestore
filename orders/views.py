@@ -4,9 +4,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from .models import Order, OrderItem
+from core.models import Order, OrderItem
 from .forms import OrderCreateForm
-from .tasks import order_created
 from cart.cart import Cart
 
 
@@ -26,12 +25,12 @@ def order_create(request):
                                          quantity=item['quantity'])
             # Clear the cart
             cart.clear()
-
-
+            print("TOIMIIKO!!!!!!!")
             # Set the order in the session
             request.session['order_id'] = order.id
             # Redirect to the payment
             return redirect(reverse('payments:process'))
+
     else:
         form = OrderCreateForm()
     return render(request, 'orders/order/create.html', {'cart': cart,

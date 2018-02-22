@@ -2,14 +2,15 @@ from decimal import Decimal
 from django.conf import settings
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
-from orders.models import Order
-from core.models import Player, Developer
+from core.models import Player, Developer, Payment, Order
 from django.views.decorators.csrf import csrf_exempt
 from hashlib import md5
 from payments.forms import PaymentForm
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
-
+import secrets
+import datetime
+from cart.cart import Cart
 
 """
 Renders the view for succesful payment and adds the game to the players inventory.
@@ -19,8 +20,10 @@ Also sends a confirmation email to the user of the completed purchase.
 def payment_done(request):
     if request.GET['result'] == 'success':
         pid = request.GET['pid']
-        order = get_object_or_404(Order, id=pid)
+        payment = get_object_or_404(Payment, payment_id=pid)
+        order = payment.order
         order.paid = True
+        order.updated = datetime.datetime.now()
         order.save()
         items = order.items.all()
         uid = request.user.id
@@ -32,6 +35,9 @@ def payment_done(request):
             games.append(item.game)
             item.game.save()
         player.save()
+        payment.delete(keep_parents=True)
+        cart = Cart(request)
+        cart.clear()
 
         # The confirmation email.
         mail_subject = 'Thank you for your purchase!'
@@ -59,6 +65,9 @@ Renders the canceled payment page.
 """
 @csrf_exempt
 def payment_canceled(request):
+    pid = request.GET['pid']
+    payment = get_object_or_404(Payment, payment_id=pid)
+    payment.delete(keep_parents=True)
     return render(request, 'payments/canceled.html')
 
 """
@@ -66,6 +75,9 @@ Renders the error -page when there is an error with the payment
 """
 @csrf_exempt
 def payment_error(request):
+    pid = request.GET['pid']
+    payment = get_object_or_404(Payment, payment_id=pid)
+    payment.delete(keep_parents=True)
     return render(request, 'payments/error.html')
 
 
@@ -77,7 +89,8 @@ def payment_process(request):
     order_id = request.session.get('order_id')
     order = get_object_or_404(Order, id=order_id)
     host = request.get_host()
-    pid = order.id
+    pid = secrets.randbelow(1000000000)
+    Payment.objects.create(payment_id=pid, order=order)
     sid = 'thebestgamestore'
     amount = '%.2f' % order.get_total_cost().quantize(Decimal('.01'))
     checksumstr = "pid={}&sid={}&amount={}&token={}".format(pid, sid, amount, settings.SECRET_KEY)
