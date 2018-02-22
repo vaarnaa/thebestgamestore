@@ -76,7 +76,7 @@ def player_activate(request, uidb64, token):
         user.is_player = True
         user.save()
         player = Player.objects.create(user=user)
-        auth_login(request, user)
+        auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('/')
     else:
         return HttpResponse('Activation link is invalid!')
@@ -121,7 +121,7 @@ def developer_activate(request, uidb64, token):
         user.is_developer = True
         user.save()
         developer = Developer.objects.create(user=user)
-        auth_login(request, user)
+        auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('/')
     else:
         return HttpResponse('Activation link is invalid!')
