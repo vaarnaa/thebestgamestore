@@ -24,8 +24,22 @@
             </div>
           </div>
         </div>
+        <div class="col-sm-4 col-md-4"> <!--row col-lg-10-->
+          <div class="thumbnail dev-settings">
+            <form action="{% url 'remove_game' %}" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <h4>Remove game from store:</h4>
+                <br>
+              <!--<div class=""> col-sm-offset-2 col-sm-10-->
+                <input type="hidden" name='id' value={{game.id}}>
+                <input  type="submit" value="Remove game">
+              </div>
+            </form>
+          </div>
+        </div>
         <div class="col-sm-4 col-md-4">
-          <div class="thumbnail">
+          <div class="thumbnail dev-settings">
             <form action="." method="post">
               {% csrf_token %}
               <div class="form-group">
@@ -61,15 +75,8 @@
           </table>
         </div>
   </div>
-  <div class="row col-lg-10">
-    <form action="{% url 'remove_game' %}" method="post">
-      {% csrf_token %}
-      <div class="col-sm-offset-2 col-sm-10">
-        <input type="hidden" name='id' value={{game.id}}>
-        <input type="submit" value="Remove game">
-      </div>
-    </form>
-  </div>
+  <br>
+  <br>
 
 {% endif %}
 {% endblock %}
