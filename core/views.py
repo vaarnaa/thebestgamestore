@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login as auth_login, authenticate
 from django.views.generic import CreateView
 from .forms import PlayerSignUpForm, DeveloperSignUpForm, AddGameForm, SelectUserTypeForm, PriceUpdateForm
-from .models import User, Game, Category, Player, Developer, Highscore
+from .models import User, Game, Category, Player, Developer, Highscore, Order, OrderItem
 from django.shortcuts import get_object_or_404
 from django.shortcuts import get_list_or_404
 from cart.forms import CartAddGameForm
@@ -153,45 +153,60 @@ Renders the view with the details of the selected game.
 """
 
 def game_detail(request, id, slug):
-    game = get_object_or_404(Game, id=id, slug=slug)
-    cart_game_form = CartAddGameForm()
-    the_user = request.user
-
-    # Different view for player.
-    if the_user.is_authenticated and the_user.is_player:
-        player = get_object_or_404(Player, user_id=the_user.id)
-        games = player.games.all()
-
-        if game in games:   #Checking if the user owns the game in question.
-            return render(request,
-                        'game/detail_owned.html',
-                        {'game': game})
-        else:
-            return render(request,
-                        'game/detail.html',
-                        {'game': game,
-                        'cart_game_form': cart_game_form})
-    # Different view for developer.
-    elif the_user.is_authenticated and the_user.is_developer:
-        dev = get_object_or_404(Developer, user_id=the_user.id)
-        games = dev.games.all()
-        form = PriceUpdateForm()
-        if game in games:   #Checking if the user owns the game in question.
-            return render(request,
-                        'game/detail_dev.html',
-                        {'game': game,
-                         'form': form})
-        else:
-            return render(request,
-                        'game/detail.html',
-                        {'game': game,
-                        'cart_game_form': cart_game_form})
-    # Different view if the user is not authenticated.
+    if request.POST:
+        return update_price(request)
     else:
-        return render(request,
-                    'game/detail.html',
-                    {'game': game,
-                    'cart_game_form': cart_game_form})
+        game = get_object_or_404(Game, id=id, slug=slug)
+        cart_game_form = CartAddGameForm()
+        the_user = request.user
+
+
+        # Different view for player.
+        if the_user.is_authenticated and the_user.is_player:
+            player = get_object_or_404(Player, user_id=the_user.id)
+            games = player.games.all()
+
+            if game in games:   #Checking if the user owns the game in question.
+                return render(request,
+                            'game/detail_owned.html',
+                            {'game': game})
+            else:
+                return render(request,
+                            'game/detail.html',
+                            {'game': game,
+                            'cart_game_form': cart_game_form})
+        # Different view for developer.
+        elif the_user.is_authenticated and the_user.is_developer:
+            dev = get_object_or_404(Developer, user_id=the_user.id)
+            games = dev.games.all()
+            form = PriceUpdateForm()
+            if game in games:   #Checking if the user owns the game in question.
+                times = []
+                orders = Order.objects.filter(paid=True)
+                for order in orders:
+                    for item in order.items.all():
+                        if item.game == game:
+                            times.append((order.updated, item.price))
+
+
+
+
+                return render(request,
+                            'game/detail_dev.html',
+                            {'game': game,
+                             'form': form,
+                             'times': times})
+            else:
+                return render(request,
+                            'game/detail.html',
+                            {'game': game,
+                            'cart_game_form': cart_game_form})
+        # Different view if the user is not authenticated.
+        else:
+            return render(request,
+                        'game/detail.html',
+                        {'game': game,
+                        'cart_game_form': cart_game_form})
 
 
 
@@ -312,10 +327,17 @@ def update_price(request):
         if game in games:
             game.price = request.POST['new_price']
             game.save()
+            times = []
+            orders = Order.objects.filter(paid=True)
+            for order in orders:
+                for item in order.items.all():
+                    if item.game == game:
+                        times.append((order.updated, item.price))
             return render(request,
                         'game/detail_dev.html',
                         {'game': game,
-                         'form': form})
+                         'form': form,
+                         'times': times})
         else:
             return redirect('core:index')
     else:

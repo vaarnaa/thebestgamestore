@@ -22,6 +22,15 @@ def payment_done(request):
         pid = request.GET['pid']
         payment = get_object_or_404(Payment, payment_id=pid)
         order = payment.order
+        sid = 'thebestgamestore'
+        amount = '%.2f' % order.get_total_cost().quantize(Decimal('.01'))
+        checksumstr = "pid={}&sid={}&amount={}&token={}".format(pid, sid, amount, settings.SECRET_KEY)
+        m = md5(checksumstr.encode("ascii"))
+        checksum = m.hexdigest()
+        print(checksum)
+
+
+
         order.paid = True
         order.updated = datetime.datetime.now()
         order.save()
@@ -36,8 +45,7 @@ def payment_done(request):
             item.game.save()
         player.save()
         payment.delete(keep_parents=True)
-        cart = Cart(request)
-        cart.clear()
+
 
         # The confirmation email.
         mail_subject = 'Thank you for your purchase!'
@@ -56,8 +64,9 @@ def payment_done(request):
         email.send()
 
         return render(request, 'payments/done.html')
+
     else:
-        return render(request, 'payments/canceled.html')
+        return render(request, 'payments/error.html')
 
 
 """
@@ -96,6 +105,7 @@ def payment_process(request):
     checksumstr = "pid={}&sid={}&amount={}&token={}".format(pid, sid, amount, settings.SECRET_KEY)
     m = md5(checksumstr.encode("ascii"))
     checksum = m.hexdigest()
+
 
     # Inputs for the POST -message.
     payment_details = {

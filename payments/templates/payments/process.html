@@ -5,8 +5,8 @@
 {% block content %}
     <h1>Pay now with NiksulaPay!</h1>
     <form action="http://payments.webcourse.niksula.hut.fi/pay/" method="post">
-    {% csrf_token %}
+      {% csrf_token %}
       {{ form }}
-    <input type="submit" value="Pay now" />
-</form>
+      <input type="submit" value="Pay now" />
+    </form>
 {% endblock %}

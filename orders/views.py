@@ -25,7 +25,7 @@ def order_create(request):
                                          quantity=item['quantity'])
             # Clear the cart
             cart.clear()
-            print("TOIMIIKO!!!!!!!")
+
             # Set the order in the session
             request.session['order_id'] = order.id
             # Redirect to the payment
