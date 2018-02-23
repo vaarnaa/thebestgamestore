@@ -124,6 +124,17 @@ ul.errorlist {
    padding:0;
 }
 
+.price-input {
+    /*width:300px;*/
+    margin-bottom:3px;
+    padding:4px 6px;
+    /*border:0;
+    background:#efefef;*/
+    background-color: white;
+    color:#666;
+    border-radius:4px;
+}
+
 
 #header {
     padding:10px 100px;
