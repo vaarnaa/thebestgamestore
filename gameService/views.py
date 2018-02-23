@@ -51,9 +51,8 @@ def savegame(request, id):
     Gamestate.objects.create(stateGame=game,
                                  statePlayer=player,
                                  gamestate=gamestate)
-    savegames = Gamestate.filter(stateGame=game).filter(statePlayer=player)
-    data = list(json.dumps(savegames))    
-    return JsonResponse({'savegames': data})
+
+    return redirect(reverse('gameService: play'))
 
 
 

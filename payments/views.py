@@ -10,8 +10,10 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 import secrets
 import datetime
-from cart.cart import Cart
 
+
+
+secret_key = "4c5e699656586b17e3775a51281cb3d0"
 """
 Renders the view for succesful payment and adds the game to the players inventory.
 Also sends a confirmation email to the user of the completed purchase.
@@ -22,49 +24,50 @@ def payment_done(request):
         pid = request.GET['pid']
         payment = get_object_or_404(Payment, payment_id=pid)
         order = payment.order
-        sid = 'thebestgamestore'
+        ref = request.GET['ref']
+        result = request.GET['result']
         amount = '%.2f' % order.get_total_cost().quantize(Decimal('.01'))
-        checksumstr = "pid={}&sid={}&amount={}&token={}".format(pid, sid, amount, settings.SECRET_KEY)
+        checksumstr = "pid={}&ref={}&result={}&token={}".format(pid, ref, result, secret_key)
         m = md5(checksumstr.encode("ascii"))
         checksum = m.hexdigest()
-        print(checksum)
+
+        if checksum == request.GET["checksum"]:
+
+            order.paid = True
+            order.updated = datetime.datetime.now()
+            order.save()
+            items = order.items.all()
+            uid = request.user.id
+            player = get_object_or_404(Player, user_id=uid)
+            games = []
+            for item in items:
+                player.games.add(item.game)
+                item.game.times_bought += 1
+                games.append(item.game)
+                item.game.save()
+            player.save()
+            payment.delete(keep_parents=True)
 
 
+            # The confirmation email.
+            mail_subject = 'Thank you for your purchase!'
+            message = render_to_string('payments/done_email.html', {
+                'user': request.user,
+                'first_name': order.first_name,
+                'last_name': order.last_name,
+                'email': order.email,
+                'address': order.address,
+                'postal_code': order.postal_code,
+                'city': order.city,
+                'games': games,
+                'price': order.get_total_cost()})
+            to_email = order.email
+            email = EmailMessage(mail_subject, message, to=[to_email])
+            email.send()
 
-        order.paid = True
-        order.updated = datetime.datetime.now()
-        order.save()
-        items = order.items.all()
-        uid = request.user.id
-        player = get_object_or_404(Player, user_id=uid)
-        games = []
-        for item in items:
-            player.games.add(item.game)
-            item.game.times_bought += 1
-            games.append(item.game)
-            item.game.save()
-        player.save()
-        payment.delete(keep_parents=True)
-
-
-        # The confirmation email.
-        mail_subject = 'Thank you for your purchase!'
-        message = render_to_string('payments/done_email.html', {
-            'user': request.user,
-            'first_name': order.first_name,
-            'last_name': order.last_name,
-            'email': order.email,
-            'address': order.address,
-            'postal_code': order.postal_code,
-            'city': order.city,
-            'games': games,
-            'price': order.get_total_cost()})
-        to_email = order.email
-        email = EmailMessage(mail_subject, message, to=[to_email])
-        email.send()
-
-        return render(request, 'payments/done.html')
-
+            return render(request, 'payments/done.html')
+        else:
+            return render(request, 'payments/error.html')
     else:
         return render(request, 'payments/error.html')
 
@@ -102,7 +105,7 @@ def payment_process(request):
     Payment.objects.create(payment_id=pid, order=order)
     sid = 'thebestgamestore'
     amount = '%.2f' % order.get_total_cost().quantize(Decimal('.01'))
-    checksumstr = "pid={}&sid={}&amount={}&token={}".format(pid, sid, amount, settings.SECRET_KEY)
+    checksumstr = "pid={}&sid={}&amount={}&token={}".format(pid, sid, amount, secret_key)
     m = md5(checksumstr.encode("ascii"))
     checksum = m.hexdigest()
 
