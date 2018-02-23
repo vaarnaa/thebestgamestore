@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Own Game</title>
+  <meta charset="utf-8"/>
+  <style>
+    body {background-color: rgb(200, 230, 255);
+    }
+    ul li {clear: both; float: left;
+    }
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready( function() {
+  "use strict";
+
+  // These variable track the state of this "game"
+  var playerItems = [];
+  var points = 0;
+
+  //generate two random numbers, number1 and number2, between 1 and 10
+  var number1 = Math.floor((Math.random() * 10) + 1);
+  var number2 = Math.floor((Math.random() * 10) + 1);
+  var answer = number1 * number2;
+  var checkAnswer = 0;
+  $('#number1').html(number1);
+  $('#number2').html(number2);
+
+  //function for adding item to playerItems
+  function add_item(item) {
+      playerItems.push(item);
+      updateItems();
+  }
+
+  //on button click check if answer is correct
+  $("#btn").click(function(){
+    checkAnswer = $('#input').val();
+    console.log(checkAnswer);
+    console.log(answer);
+
+    //if answer correct add one point to score and possible item
+    if (answer==checkAnswer) {
+      points += 1;
+      $("#score").text(points);
+      if (points == 5) {
+        alert("Congratulations! You earned the Wizard's Hat!");
+        add_item("Wizard's Hat");
+      }
+      else if (points == 10) {
+        alert("Congratulations! You earned the Wizard's Robe!");
+        add_item("Wizard's Robe");
+      }
+      else if (points == 20) {
+        alert("Congratulations! You earned the Wizard's Wand!");
+        add_item("Wizard's Wand");
+      }
+      else if (points == 30) {
+        alert("Congratulations! You are a true Wizard!");
+      }
+
+
+    }
+    //if wrong answer, clear score
+    else {
+      alert('You are incorrect, the answer was ' + answer);
+      points = 0;
+      $("#score").text(points);
+    }
+
+    //generate new random numbers and clear input field
+    number1 = Math.floor((Math.random() * 10) + 1);
+    number2 = Math.floor((Math.random() * 10) + 1);
+    answer = number1 * number2;
+    $('#input').val('');
+    $('#number1').html(number1);
+    $('#number2').html(number2);
+  });
+
+
+  // Simulates "game over" when a score would be sent
+  $("#submit_score").click( function () {
+    var msg = {
+      "messageType": "SCORE",
+      "score": parseFloat($("#score").text())
+    };
+    window.parent.postMessage(msg, "*");
+  });
+
+  // Sends this game's state to the service.
+  // The format of the game state is decided
+  // by the game
+  $("#save").click( function () {
+    var msg = {
+      "messageType": "SAVE",
+      "gameState": {
+        "playerItems": playerItems,
+        "score": parseFloat($("#score").text())
+      }
+    };
+    window.parent.postMessage(msg, "*");
+  });
+
+  // Sends a request to the service for a
+  // state to be sent, if there is one.
+  $("#load").click( function () {
+    var msg = {
+      "messageType": "LOAD_REQUEST",
+    };
+    window.parent.postMessage(msg, "*");
+  });
+
+  // Listen incoming messages, if the messageType
+  // is LOAD then the game state will be loaded.
+  // Note that no checking is done, whether the
+  // gameState in the incoming message contains
+  // correct information.
+  //
+  // Also handles any errors that the service
+  // wants to send (displays them as an alert).
+  window.addEventListener("message", function(evt) {
+    if(evt.data.messageType === "LOAD") {
+      playerItems = evt.data.gameState.playerItems;
+      points = evt.data.gameState.score;
+      $("#score").text(points);
+      updateItems();
+    } else if (evt.data.messageType === "ERROR") {
+      alert(evt.data.info);
+    }
+  });
+
+
+  // "Redraws" the inventory of the player. Used
+  // when items are added or the game is loaded
+  function updateItems() {
+    $("#item_list").html("");
+    for (var i = playerItems.length - 1; i >= 0; i--) {
+      $("#item_list").append("<li>" + playerItems[i] + "</li>");
+    }
+  }
+
+  // Request the service to set the resolution of the
+  // iframe correspondingly
+  var message =  {
+    messageType: "SETTING",
+    options: {
+      "width": 700, //Integer
+      "height": 700 //Integer
+      }
+  };
+  window.parent.postMessage(message, "*");
+
+});
+
+</script>
+</head>
+<body>
+  <br>
+  <br>
+  <div style="width: 300px; border: 1px; margin: 0 auto; text-align: center;">
+    <h3>Math Wizard</h3>
+    <br>
+    <div>
+      <button id="submit_score">Submit score</button>
+      <button id="save">Save</button>
+      <button id="load">Load</button>
+    </div>
+    <br>
+    <br>
+    <table>
+      <tr>
+        <td><div id="number1">1</div></td>
+        <td><div>*</div></td>
+        <td><div id="number2">2</div></td>
+        <td><div>=</div></td>
+        <td><input id="input" name="input" type="text"></td>
+        <td><input id="btn" name="btn" type="button" value="Check answer"></td>
+      </tr>
+    </table>
+    <br>
+    <br>
+    <br>
+    <div style="float:left; font-weight: bold;">Score: <span id="score">0</span></div>
+    <p style="clear: both; float:left; font-weight: bold;">Items: </p>
+    <ul style="list-style-type: none;" id="item_list"></ul>
+  </div>
+
+</body>
+</html>
