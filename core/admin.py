@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Game, Category, Player, Developer, User, Highscore, Payment, Order, OrderItem
+from .models import Game, Category, Player, Developer, User, Highscore, Payment, Order, OrderItem, Gamestate
 
 
 
@@ -65,6 +65,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ['paid', 'created', 'updated']
     inlines = [OrderItemInline]
 
+
 admin.site.register(Order, OrderAdmin)
 
 
@@ -72,4 +73,9 @@ class PaymentAdmin(admin.ModelAdmin):
     list_display = ["payment_id", 'order']
 
 
-admin.site.register(Payment,PaymentAdmin)
+admin.site.register(Payment, PaymentAdmin)
+
+class GamestateAdmin(admin.ModelAdmin):
+    list_display = ['stateGame', 'statePlayer', 'gamestate']
+
+admin.site.register(Gamestate, GamestateAdmin)

@@ -39,7 +39,7 @@ $(document).ready(function () {
 
     } else if(data.messageType == "SAVE"){
       console.log("Save");
-      post('/play/savegame/'+ game_id , data );
+      post('' , data);
     } else if(data.messageType == 'ERROR'){}
   });
 });

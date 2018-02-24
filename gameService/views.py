@@ -13,15 +13,31 @@ def play(request, id):
 
     player = get_object_or_404(Player, user_id=request.user.id)
     game = get_object_or_404(Game, id=id)
-    if game in player.games.all():
-        gameUrl = str(game.url)
 
-        return render(request, 'gameService/gameService.html', {'gameUrl': gameUrl,
-                                                                'game': game})
+    if request.POST:
+        if game in player.games.all():
+            gameUrl = str(game.url)
+            if request.POST['messageType'] == 'SAVE':
+                gamestate = request.POST['gameState']
+
+                Gamestate.objects.create(stateGame=game,
+                                             statePlayer=player,
+                                             gamestate=gamestate)
+
+
+                return render(request, 'gameService/gameService.html', {'gameUrl': gameUrl,
+                                                                        'game': game})
+
     else:
-        cart_game_form = CartAddGameForm()
-        return render(request, 'game/detail.html', {'game': game,
-                                                    'cart_game_form': cart_game_form})
+        if game in player.games.all():
+            gameUrl = str(game.url)
+
+            return render(request, 'gameService/gameService.html', {'gameUrl': gameUrl,
+                                                                    'game': game})
+        else:
+            cart_game_form = CartAddGameForm()
+            return render(request, 'game/detail.html', {'game': game,
+                                                        'cart_game_form': cart_game_form})
 
 
 def savescore(request, id):
@@ -52,7 +68,8 @@ def savegame(request, id):
                                  statePlayer=player,
                                  gamestate=gamestate)
 
-    return redirect(reverse('gameService: play'))
+
+    return redirect('gameService:play', {'id': id})
 
 
 
