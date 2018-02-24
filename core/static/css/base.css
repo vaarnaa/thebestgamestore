@@ -415,6 +415,14 @@ ul.errorlist {
     text-align: center;
 }
 
+#title2 {
+    width: 300px;
+    height: 200px;
+    margin: 0px auto;
+    overflow:auto;
+    text-align: center;
+}
+
 .logo {
     width: 100%;
     height:auto;

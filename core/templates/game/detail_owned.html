@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block head %}
+<meta property="og:image" content="https://thebestgamestore.herokuapp.com{% if game.image %}{{ game.image.url }}{% else %}{% static "no_image.png" %}{% endif %}" />
+<meta property="og:title" content="{{ game.name }}" />
+<meta property="og:description" content="{{ game.description }}" />
+{% endblock %}
+
+
 {% block content %}
 <script>
   $("#index").attr('class', 'navbar-brand active');
@@ -13,6 +20,15 @@
         {% if user.is_authenticated and user.is_player %}
             <a href="{% url 'gameService:play' id=game.id %}" class="btn btn-info" role="button">Play</a>
         {% endif %}
+        <br>
+        <br>
 
     </div>
+    <div id="title2">
+      <div id="facebook-share">
+        <p>Tell your friends about this game</p>
+        <button type="button" class="btn btn-primary facebook" target="_blank" ><a href="http://www.facebook.com/sharer/sharer.php?u=https://thebestgamestore.herokuapp.com/{{ request.get_full_path|urlencode }}">Share on Facebook</a></button>
+      </div>
+    </div>
+
 {% endblock %}
