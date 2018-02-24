@@ -412,6 +412,7 @@ ul.errorlist {
     margin: 0px auto;
     height:auto;
     overflow:auto;
+    text-align: center;
 }
 
 .logo {
@@ -425,6 +426,20 @@ ul.errorlist {
     width: 100%;
     height:auto;
     border: 0;
+}
+
+#facebook-share {
+  //width: 40%;
+}
+
+.facebook {
+    /*width: 100%;
+    height:auto;*/
+    margin: 0px 0px 50px 0px;
+}
+
+.btn.btn-primary.facebook a {
+  color: white;
 }
 
 /*label.btn span {

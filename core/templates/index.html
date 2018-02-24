@@ -7,10 +7,14 @@
     $("#index").attr('class', 'navbar-brand active');
     $( "div#title" ).removeClass( "container" )
   </script>
-
+  <!--style="margin: 10px auto; text-align: center; width: 400px"-->
   <div id="title">
     <div class="logo"><img src="{% static "media/HeaderText4.svg" %}" alt="Title The Best Game Store"></div>
-    <button class="btn btn-default" target="_blank" style="margin: 10px auto; text-align: center; width: 400px"><a href="http://www.facebook.com/sharer/sharer.php?u=http://127.0.0.1:8000/{{ request.get_full_path|urlencode }}">Press here to spam your friends in Facebook!</a></button>
+    <div id="facebook-share">
+      <p>Tell us your friends about us by clicking the button below</p>
+      <br>
+      <button type="button" class="btn btn-primary facebook" target="_blank" ><a href="http://www.facebook.com/sharer/sharer.php?u=http://127.0.0.1:8000/{{ request.get_full_path|urlencode }}">Share on Facebook</a></button>
+    </div>
     <!--<a href="http://www.facebook.com/share.php?u=http://127.0.0.1:8000/{{ request.get_full_path|urlencode }}" target="_blank" title="Share on Facebook">
       <img src="http://carlosvin.alwaysdate.net/templates/img/fb.png" alt="Whatever"/>
     </a>-->
