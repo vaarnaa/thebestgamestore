@@ -18,6 +18,10 @@ def play(request, id):
         if game in player.games.all():
             gameUrl = str(game.url)
             if request.POST['messageType'] == 'SAVE':
+                old_gamestates = Gamestate.objects.filter(game=stateGame, player=statePlayer)
+                for state in old_gamestates:
+                    state.delete(keep_parents=True)
+
                 gamestate = request.POST['gameState']
 
                 Gamestate.objects.create(stateGame=game,
@@ -27,6 +31,15 @@ def play(request, id):
 
                 return render(request, 'gameService/gameService.html', {'gameUrl': gameUrl,
                                                                         'game': game})
+
+            elif request.POST['messageType'] == 'LOAD_REQUEST':
+                pass
+
+            
+
+        cart_game_form = CartAddGameForm()
+        return render(request, 'game/detail.html', {'game': game,
+                                                    'cart_game_form': cart_game_form})
 
     else:
         if game in player.games.all():

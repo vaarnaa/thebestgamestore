@@ -9,7 +9,6 @@ $(document).ready(function () {
 
   $(window).on('message', function (event) {
     var data = event.originalEvent.data;
-
     // https://stackoverflow.com/questions/133925/javascript-post-request-like-a-form-submit
     function post(path, params, method) {
         method = method || "post"; // Set method to post by default if not specified.
@@ -34,12 +33,21 @@ $(document).ready(function () {
         form.submit();
     }
 
-    if(data.messageType == "SCORE"){
+    if(data.messageType == 'SETTING'){
+
+      $('#encoder_iframe').attr('width', data.options.width);
+      $('#encoder_iframe').attr('height', data.options.height);
+
+    } else if(data.messageType == "SCORE"){
       post('/play/savescore/'+ game_id , data );
 
     } else if(data.messageType == "SAVE"){
-      console.log("Save");
-      post('' , data);
-    } else if(data.messageType == 'ERROR'){}
+  
+      post('', data);
+    } else if(data.messageType == 'ERROR'){
+      post('', data);
+    } else if(data.messageType == 'LOAD_REQUEST'){
+      post('', data);
+    }
   });
 });
