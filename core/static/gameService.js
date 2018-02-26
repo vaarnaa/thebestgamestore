@@ -10,6 +10,7 @@ $(document).ready(function () {
   $(window).on('message', function (event) {
     var data = event.originalEvent.data;
     // https://stackoverflow.com/questions/133925/javascript-post-request-like-a-form-submit
+    // A function for posting data to target URL
     function post(path, params, method) {
         method = method || "post"; // Set method to post by default if not specified.
 
@@ -34,6 +35,7 @@ $(document).ready(function () {
     }
 
     // Source reference: https://stackoverflow.com/questions/1184624/convert-form-data-to-javascript-object-with-jquery
+    // Helper function to make JSON out of form data
     function formToJSON( selector ){
        var form = {};
        $(selector).find(':input[name]:enabled').each( function() {
@@ -50,7 +52,7 @@ $(document).ready(function () {
        return form;
     }
 
-
+    // Handling of different POST messages received from the game
     if(data.messageType == 'SETTING'){
 
       $('#encoder_iframe').attr('width', data.options.width);
@@ -63,7 +65,7 @@ $(document).ready(function () {
     } else if(data.messageType == "SAVE"){
       alert("Game Saved!");
       post('', {'messageType': data.messageType, 'gameState': JSON.stringify(data.gameState)});
-      window.postMessage({'messageType': 'LOAD_REQUEST'})
+
     } else if(data.messageType == 'ERROR'){
 
     } else if(data.messageType == 'LOAD_REQUEST'){

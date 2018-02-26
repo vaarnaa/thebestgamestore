@@ -3,10 +3,14 @@
 {% block title %}Pay now{% endblock %}
 
 {% block content %}
-    <h1>Pay now with NiksulaPay!</h1>
+  <div class="container">
+
+    <h2>Pay now with Niksula Pay!</h2>
+    <br />
     <form action="http://payments.webcourse.niksula.hut.fi/pay/" method="post">
       {% csrf_token %}
       {{ form }}
-      <input type="submit" value="Pay now" />
+      <input class="btn" type="submit" value="Pay now" />
     </form>
+    </div>
 {% endblock %}
