@@ -5,8 +5,13 @@
 {% block content %}
 <form id="form" method="post">
   {% csrf_token %}
+
 </form>
 
+<form id="load_form" target="encoder_iframe" method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+</form>
 
 
 

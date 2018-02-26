@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import get_list_or_404
 from cart.forms import CartAddGameForm
+from gameService.forms import GamestateForm
 from django.urls import reverse
 from core.models import Game, Player, Highscore, Gamestate
 from core.views import highscores
@@ -13,29 +14,32 @@ def play(request, id):
 
     player = get_object_or_404(Player, user_id=request.user.id)
     game = get_object_or_404(Game, id=id)
+    gamestate = Gamestate.objects.filter(stateGame=game, statePlayer=player)
+    if gamestate:
+        gamestate = gamestate[0].gamestate
+
+    form = GamestateForm({'gameState': gamestate})
 
     if request.POST:
         if game in player.games.all():
             gameUrl = str(game.url)
             if request.POST['messageType'] == 'SAVE':
-                old_gamestates = Gamestate.objects.filter(game=stateGame, player=statePlayer)
+                old_gamestates = Gamestate.objects.filter(stateGame=game, statePlayer=player)
                 for state in old_gamestates:
                     state.delete(keep_parents=True)
 
                 gamestate = request.POST['gameState']
 
                 Gamestate.objects.create(stateGame=game,
-                                             statePlayer=player,
-                                             gamestate=gamestate)
+                                         statePlayer=player,
+                                         gamestate=gamestate)
+
+                form = GamestateForm({'gameState': gamestate})
 
 
                 return render(request, 'gameService/gameService.html', {'gameUrl': gameUrl,
-                                                                        'game': game})
-
-            elif request.POST['messageType'] == 'LOAD_REQUEST':
-                pass
-
-            
+                                                                        'game': game,
+                                                                        'form': form})
 
         cart_game_form = CartAddGameForm()
         return render(request, 'game/detail.html', {'game': game,
@@ -46,7 +50,8 @@ def play(request, id):
             gameUrl = str(game.url)
 
             return render(request, 'gameService/gameService.html', {'gameUrl': gameUrl,
-                                                                    'game': game})
+                                                                    'game': game,
+                                                                    'form': form})
         else:
             cart_game_form = CartAddGameForm()
             return render(request, 'game/detail.html', {'game': game,
@@ -70,20 +75,6 @@ def savescore(request, id):
                                  score=new_score)
 
     return redirect(reverse('highscores'), permanent=True)
-
-
-def savegame(request, id):
-
-    player = get_object_or_404(Player, user_id=request.user.id)
-    game = get_object_or_404(Game, id=id)
-    gamestate = request.POST['gameState']
-    Gamestate.objects.create(stateGame=game,
-                                 statePlayer=player,
-                                 gamestate=gamestate)
-
-
-    return redirect('gameService:play', {'id': id})
-
 
 
 def loadgame(request, game_id):

@@ -33,6 +33,24 @@ $(document).ready(function () {
         form.submit();
     }
 
+    // Source reference: https://stackoverflow.com/questions/1184624/convert-form-data-to-javascript-object-with-jquery
+    function formToJSON( selector ){
+       var form = {};
+       $(selector).find(':input[name]:enabled').each( function() {
+               var self = $(this);
+               var name = self.attr('name');
+               if (form[name]) {
+                form[name] = form[name] + ',' + self.val();
+            }
+            else {
+                form[name] = self.val();
+            }
+        });
+
+       return form;
+    }
+
+
     if(data.messageType == 'SETTING'){
 
       $('#encoder_iframe').attr('width', data.options.width);
@@ -41,13 +59,28 @@ $(document).ready(function () {
     } else if(data.messageType == "SCORE"){
       post('/play/savescore/'+ game_id , data );
 
+
     } else if(data.messageType == "SAVE"){
-  
-      post('', data);
+      alert("Game Saved!");
+      post('', {'messageType': data.messageType, 'gameState': JSON.stringify(data.gameState)});
+      window.postMessage({'messageType': 'LOAD_REQUEST'})
     } else if(data.messageType == 'ERROR'){
-      post('', data);
+
     } else if(data.messageType == 'LOAD_REQUEST'){
-      post('', data);
+
+      var form = formToJSON('#load_form');
+      try{
+        var load_data = {'messageType': 'LOAD', 'gameState': JSON.parse(form.gameState)};
+        document.getElementById("encoder_iframe").contentWindow.postMessage(load_data, '*');
+        alert("Game Loaded!");
+      }catch(e){
+        var error_data = {'messageType': 'ERROR', 'info': "Could not load a gamestate."};
+        document.getElementById("encoder_iframe").contentWindow.postMessage(error_data, '*');
+      }
+
+
+
+
     }
   });
 });
