@@ -4,6 +4,7 @@ from django.db import transaction
 
 from core.models import Player, Developer, User, Game
 
+# Form for selection user type when signing up with a third party login
 class SelectUserTypeForm(forms.Form):
     CHOICES = (
         ('player','Player'),
@@ -11,11 +12,11 @@ class SelectUserTypeForm(forms.Form):
     )
     select = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
 
-
+# Form to update game price
 class PriceUpdateForm(forms.Form):
     new_price = forms.IntegerField(widget=forms.TextInput(attrs={'name': 'new_price'}))
 
-
+# Form for player signup.
 class PlayerSignUpForm(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Username'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'Email address'}))
@@ -34,6 +35,7 @@ class PlayerSignUpForm(UserCreationForm):
         player = Player.objects.create(user=user)
         return user"""
 
+# Form for developer signup.
 class DeveloperSignUpForm(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Username'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'Email address'}))
@@ -52,7 +54,7 @@ class DeveloperSignUpForm(UserCreationForm):
         developer = Developer.objects.create(user=user)
         return user"""
 
-
+# Form for adding a new game.
 class AddGameForm(forms.ModelForm):
     class Meta:
         model = Game

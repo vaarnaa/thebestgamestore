@@ -1,11 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth import login as auth_login, authenticate
-from django.views.generic import CreateView
+from django.contrib.auth import login as auth_login
 from .forms import PlayerSignUpForm, DeveloperSignUpForm, AddGameForm, SelectUserTypeForm, PriceUpdateForm
-from .models import User, Game, Category, Player, Developer, Highscore, Order, OrderItem
+from .models import User, Game, Category, Player, Developer, Order
 from django.shortcuts import get_object_or_404
-from django.shortcuts import get_list_or_404
 from cart.forms import CartAddGameForm
 
 from django.contrib.sites.shortcuts import get_current_site
@@ -14,9 +12,11 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
-from django.urls import reverse
 
-
+"""
+View for the third party signup. Renders te view where the user
+selects the user type they want to create.
+"""
 def get_user_type(request):
     if request.method == 'POST':
         form = SelectUserTypeForm(request.POST)
@@ -37,6 +37,10 @@ def get_user_type(request):
     return render(request, "usertype_form.html", {'form': form})
 
 
+
+"""
+Renders the view after a new player has submitted the signup form.
+"""
 def player_signup(request):
     if request.method == 'POST':
         form = PlayerSignUpForm(request.POST)
@@ -44,6 +48,8 @@ def player_signup(request):
             user = form.save(commit=False)
             user.is_active = False
             user.save()
+
+            # Send the confirmation link to the new player.
             current_site = get_current_site(request)
             mail_subject = 'Activate your account.'
             message = render_to_string('player_active_email.html', {
@@ -65,6 +71,11 @@ def player_signup(request):
     return render(request, 'player_signup.html', {'form': form})
 
 
+
+"""
+Renders the front page view after the new player has pressed their
+activation link.
+"""
 def player_activate(request, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
@@ -82,6 +93,10 @@ def player_activate(request, uidb64, token):
         return HttpResponse('Activation link is invalid!')
 
 
+
+"""
+Renders the view after a new developer has submitted the signup form.
+"""
 def developer_signup(request):
     if request.method == 'POST':
         form = DeveloperSignUpForm(request.POST)
@@ -89,6 +104,8 @@ def developer_signup(request):
             user = form.save(commit=False)
             user.is_active = False
             user.save()
+
+            # Send the confirmation link to the new developer.
             current_site = get_current_site(request)
             mail_subject = 'Activate your account.'
             message = render_to_string('developer_active_email.html', {
@@ -110,6 +127,11 @@ def developer_signup(request):
     return render(request, 'developer_signup.html', {'form': form})
 
 
+
+"""
+Renders the front page view after the new developer has pressed their
+activation link.
+"""
 def developer_activate(request, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
@@ -364,8 +386,16 @@ def player_highscores(request):
 
     return render (request, 'player_highscores.html', {"scores": scores})
 
+
+"""
+Renders the view for signup page.
+"""
 def signup(request):
     return render(request, 'signup.html')
 
+
+"""
+Render the view for login page.
+"""
 def login(request):
     return render(request, 'login.html')

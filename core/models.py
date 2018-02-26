@@ -5,7 +5,12 @@ from datetime import datetime
 from django.core.validators import MinValueValidator
 from decimal import *
 
-
+"""
+Model extendig Django's native User model.
+Extra attributes is_player and is_developer, to make difference
+between usertypes. No user shoul ever be both at the same time. Also has
+the User classes optional email -field.
+"""
 class User(AbstractUser):
     is_player = models.BooleanField(default=False)
     is_developer = models.BooleanField(default=False)
@@ -15,7 +20,10 @@ class User(AbstractUser):
     )
 
 
-# Create your models here.
+"""
+Model for different game categories. Used to list the different games
+under categories on the shop page.
+"""
 class Category(models.Model):
     DEFAULT_PK = 1
     name = models.CharField(max_length=200, db_index=True)
@@ -33,6 +41,12 @@ class Category(models.Model):
         return reverse('core:game_list_by_category', args=[self.slug])
 
 
+
+"""
+Model for the games sold and played on the website.
+Games can have many players as well as players may have mane games.
+Games can only have one Developer, the one who added it on the website.
+"""
 class Game(models.Model):
 
     category = models.ForeignKey(Category, related_name='games', on_delete=models.CASCADE)
@@ -44,6 +58,10 @@ class Game(models.Model):
     description = models.TextField()
     times_bought = models.PositiveIntegerField(default=0)
 
+    """
+    Function to get a shortened version of the description that can
+    fit smaller text elements.
+    """
     def get_short_description(self):
         length = len(self.description)
         if (length > 100):
@@ -67,10 +85,11 @@ class Game(models.Model):
         return reverse('core:game_detail', args=[self.id, self.slug])
 
 
-
-
-
-
+"""
+Model for the player users on the website. Attributes include as
+primary key, the user, and as many to many relation the games
+owned by the player.
+"""
 class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     games = models.ManyToManyField(Game)
@@ -84,7 +103,11 @@ class Player(models.Model):
     def name(self):
         return self.user.get_full_name()
 
-#* Developer: name, email, password, games
+
+"""
+Mode for the developers on the website. Attributes include as
+primary key, the user, and as many to many relation the games
+added by the developer."""
 class Developer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     games = models.ManyToManyField(Game)
@@ -99,6 +122,12 @@ class Developer(models.Model):
         return self.user.get_full_name()
 
 
+"""
+Model for storing the highscores on the website. Attributes include
+the game the score is referenced to, the player who made the score
+and the score value. Model instances are used to show the views for
+personal and global highscore tables.
+"""
 class Highscore(models.Model):
     DEFAULT_PK = 1
     game = models.ForeignKey(Game,
@@ -107,7 +136,7 @@ class Highscore(models.Model):
     player = models.ForeignKey(Player,
                                related_name='highscores',
                                null=True,
-                               on_delete=models.SET_NULL)
+                               on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
 
     def player_name(self):
@@ -118,6 +147,10 @@ class Highscore(models.Model):
 
 
 
+"""
+Model used to store gamestates of different games for different players.
+Used to load a previous state when playing the game.
+"""
 class Gamestate(models.Model):
     DEFAULT_PK = 1
     stateGame = models.ForeignKey(Game,
@@ -135,10 +168,12 @@ class Gamestate(models.Model):
         return self.player.username()
 
 
-
-
-
-
+"""
+Model for the orders on the websites. The order holds the billing
+information and the payment status, as well as the order items
+of the order. Has a function to calculate the total price of the
+order.
+"""
 class Order(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -156,11 +191,17 @@ class Order(models.Model):
     def __str__(self):
         return 'Order {}'.format(self.id)
 
+    """
+    Fuction to calculate the total price of the order.
+    """
     def get_total_cost(self):
         amount = sum(item.get_cost() for item in self.items.all())
         return amount
 
 
+"""
+Model for different order item included in the order.
+"""
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     game = models.ForeignKey(Game, related_name='order_items', on_delete=models.CASCADE)
@@ -173,7 +214,9 @@ class OrderItem(models.Model):
     def get_cost(self):
         return self.price * self.quantity
 
-
+"""
+Model for holding the payment id during third party payment site visit.
+"""
 class Payment(models.Model):
     payment_id = models.IntegerField(primary_key=True)
     order = models.ForeignKey(Order,
