@@ -12,7 +12,7 @@ import secrets
 import datetime
 
 
-
+# Secret key identifying the webstore.
 secret_key = "4c5e699656586b17e3775a51281cb3d0"
 """
 Renders the view for succesful payment and adds the game to the players inventory.

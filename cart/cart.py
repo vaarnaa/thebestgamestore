@@ -3,7 +3,11 @@ from django.conf import settings
 from core.models import Game
 
 
+
 class Cart(object):
+    """
+    Class for webshops shopping cart.
+    """
 
     def __init__(self, request):
         """
