@@ -24,8 +24,7 @@ def get_user_type(request):
 
             # because of FIELDS_STORED_IN_SESSION, this will get copied
             # to the request dictionary when the pipeline is resumed
-            data = form.cleaned_data['select'] #'player'
-            #print(data)
+            data = form.cleaned_data['select']
             request.session['user_type'] = data
             backend = request.session['backend_name']
 
@@ -121,7 +120,7 @@ def developer_signup(request):
             response.write("<p style=\"text-align:center; padding-top:40px\">An email has been sent to " + to_email + "</p>")
             response.write("<p style=\"text-align:center\">Please confirm your email address to complete the registration.</p>")
             return response
-            #return HttpResponse('An email has been sent to', to-email Please confirm your email address to complete the registration')
+
     else:
         form = DeveloperSignUpForm()
     return render(request, 'developer_signup.html', {'form': form})
@@ -147,27 +146,6 @@ def developer_activate(request, uidb64, token):
         return redirect('/')
     else:
         return HttpResponse('Activation link is invalid!')
-
-"""class PlayerSignUp(CreateView):
-    model = User
-    form_class = PlayerSignUpForm
-    template_name = 'player_signup.html'
-
-    def form_valid(self, form):
-        user = form.save()
-        auth_login(self.request, user)
-        return redirect('/')"""
-
-"""class DeveloperSignUp(CreateView):
-    model = User
-    form_class = DeveloperSignUpForm
-    template_name = 'developer_signup.html'
-
-    def form_valid(self, form):
-        user = form.save()
-        auth_login(self.request, user)
-        return redirect('/')"""
-
 
 
 """

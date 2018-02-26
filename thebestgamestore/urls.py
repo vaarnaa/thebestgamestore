@@ -7,17 +7,10 @@ from django.conf.urls.static import static
 from django.contrib import admin
 admin.autodiscover()
 
-
 import core.views
-
-# Examples:
-# url(r'^$', 'gettingstarted.views.home', name='home'),
-# url(r'^blog/', include('blog.urls')),
 
 urlpatterns = [
     url(r'^$', core.views.index, name='index'),
-    #url(r'^login', core.views.login, name='login'),
-    #url(r'^login/$', auth_views.login, {'template_name': 'core/login.html', 'authentication_form': LoginForm}, name='login'),
     url(r'^login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/login'}, name="logout"),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
@@ -30,9 +23,7 @@ urlpatterns = [
     url(r'^player_highscores', core.views.player_highscores, name='player_highscores'),
     path('signup/', core.views.signup, name='signup'),
     path('signup/select_user_type/', core.views.get_user_type, name='usertype'),
-    #path('signup/player', core.views.PlayerSignUp.as_view(), name='player_signup'),
     path('signup/player', core.views.player_signup, name='player_signup'),
-    #path('signup/developer', core.views.DeveloperSignUp.as_view(), name='developer_signup'),
     path('signup/developer', core.views.developer_signup, name='developer_signup'),
     url(r'^activate/player/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         core.views.player_activate, name='player_activate'),

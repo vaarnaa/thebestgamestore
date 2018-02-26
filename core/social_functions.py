@@ -3,31 +3,20 @@ from django.shortcuts import redirect
 from social_core.pipeline.partial import partial
 from .views import get_user_type
 
+"""
+Function for use when logging in via Google Sign in.
 
-def make_user_by_type(strategy, backend, response, user=None, *args, **kwargs):
-    user_type = strategy.session_get('user_type', None)
+Third party Social-django module is used for social authentication
+and these functions extend the pipeline functions in settings.py
+"""
 
-    if user and user_type == 'player':
-        user.is_player = True
-        user.is_social = True
-        user.save()
-        player = Player.objects.filter(user=user)
-        if not player:
-            Player.objects.create(user=user)
+"""
+Before user creation, potential user is interrupted and presented with a form
+to choose to link his/her Google account to either player or developer account.
+After choosing one option, authentication pipeline is continued or stopped if neither option is chosen.
 
-    elif user and user_type == 'developer':
-        user.is_developer = True
-        user.is_social = True
-        user.save()
-        developer = Developer.objects.filter(user=user)
-        if not developer:
-            Developer.objects.create(user=user)
-
-    # continue the pipeline
-    return
-
-
-# partial says "we may interrupt, but we will come back here again"
+Partial says "we may interrupt, but we will come back here again"
+"""
 @partial
 def collect_user_type(strategy, request, backend, details, user=None, is_new=False, *args, **kwargs):
 
@@ -48,6 +37,33 @@ def collect_user_type(strategy, request, backend, details, user=None, is_new=Fal
     if user:
         if not (user.is_player or user.is_developer):
             return redirect(get_user_type)
+
+    # continue the pipeline
+    return
+
+
+"""
+Second custom pipeline function were user account is linked to player or developer
+based on what he/she chose earlier.
+"""
+def make_user_by_type(strategy, backend, response, user=None, *args, **kwargs):
+    user_type = strategy.session_get('user_type', None)
+
+    if user and user_type == 'player':
+        user.is_player = True
+        user.is_social = True
+        user.save()
+        player = Player.objects.filter(user=user)
+        if not player:
+            Player.objects.create(user=user)
+
+    elif user and user_type == 'developer':
+        user.is_developer = True
+        user.is_social = True
+        user.save()
+        developer = Developer.objects.filter(user=user)
+        if not developer:
+            Developer.objects.create(user=user)
 
     # continue the pipeline
     return

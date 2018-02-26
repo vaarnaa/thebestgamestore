@@ -27,13 +27,6 @@ class PlayerSignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'email', 'password1', 'password2')
 
-    """@transaction.atomic
-    def save(self):
-        user = super().save(commit=False)
-        user.is_player = True
-        user.save()
-        player = Player.objects.create(user=user)
-        return user"""
 
 # Form for developer signup.
 class DeveloperSignUpForm(UserCreationForm):
@@ -45,14 +38,7 @@ class DeveloperSignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ('username', 'email', 'password1', 'password2')
-
-    """@transaction.atomic
-    def save(self):
-        user = super().save(commit=False)
-        user.is_developer = True
-        user.save()
-        developer = Developer.objects.create(user=user)
-        return user"""
+        
 
 # Form for adding a new game.
 class AddGameForm(forms.ModelForm):

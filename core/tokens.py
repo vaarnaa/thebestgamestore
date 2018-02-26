@@ -1,3 +1,5 @@
+#used for generating tokens for account email validation
+
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils import six
 class TokenGenerator(PasswordResetTokenGenerator):

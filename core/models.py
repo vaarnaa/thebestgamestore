@@ -1,14 +1,14 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
-from datetime import datetime
 from django.core.validators import MinValueValidator
 from decimal import *
+from django.utils import timezone
 
 """
 Model extendig Django's native User model.
-Extra attributes is_player and is_developer, to make difference
-between usertypes. No user shoul ever be both at the same time. Also has
+Extra attributes are is_player and is_developer, to make difference
+between usertypes. No user should ever be both at the same time. Field is_social is for separating social login users from others.  Also has
 the User classes optional email -field.
 """
 class User(AbstractUser):
@@ -163,7 +163,7 @@ class Gamestate(models.Model):
                                null=True,
                                on_delete=models.SET_NULL)
     gamestate = models.TextField(default="")
-    time = models.DateTimeField(default=datetime.now())
+    time = models.DateTimeField(default=timezone.now())
 
     def player_name(self):
         return self.player.username()

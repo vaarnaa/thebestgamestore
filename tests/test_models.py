@@ -1,8 +1,8 @@
 from django.test import TestCase
+from django.utils import timezone
+from decimal import *
 
-# Create your tests here.
-
-from core.models import User, Player, Developer, Game, Category, Highscore
+from core.models import User, Player, Developer, Game, Category, Highscore, Order, OrderItem
 
 
 class UserTypeModelTests(TestCase):
@@ -136,6 +136,17 @@ class GameModelTests(TestCase):
             times_bought = '1')
 
 
+    def test_game_fields(self):
+        game = Game.objects.get(id=1)
+        name_max_length = game._meta.get_field('name').max_length
+        self.assertEquals(name_max_length,255)
+        slug_max_length = game._meta.get_field('slug').max_length
+        self.assertEquals(slug_max_length,255)
+        price_max_digits = game._meta.get_field('price').max_digits
+        self.assertEquals(price_max_digits, 10)
+        decimals = game._meta.get_field('price').decimal_places
+        self.assertEquals(decimals, 2)
+
     def test_meta_fields(self):
         category = Category.objects.get(id=1)
         games = category.games.all()
@@ -192,12 +203,129 @@ class HighscoreModelTests(TestCase):
         highscore1 = game.highscores.filter().first()
         highscore2 = player.highscores.filter().first()
         self.assertTrue(highscore1, highscore2)
-        
+
 
     def test_custom_methods(self):
-
+        player_user = User.objects.get(id=1)
+        game = Game.objects.get(id=1)
+        highscore1 = game.highscores.filter().first()
         expected_object_name = highscore1.player_name()
         self.assertEquals(expected_object_name,player_user.username)
 
         highscore_first = Highscore.objects.filter().first()
         self.assertEquals(highscore_first.score, 100)
+
+
+class OrderItemModelTests(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        category = Category.objects.create(name="Action", slug="action")
+        game = Game.objects.create(
+            category = category,
+            url = 'http://127.0.0.1:8000/static/own_game.html',
+            name = 'WormGame',
+            slug = "wormgame",
+            price = "100.50",
+            image = "http://127.0.0.1:8000/static/img/123369.png",
+            description = 'Matopeli',
+            times_bought = '1')
+
+        order = Order.objects.create(
+            first_name = 'Matti',
+            last_name = 'Meikalainen',
+            email = 'matti.meikalainen@gmail.com',
+            address = 'Otakaari 1',
+            postal_code = '00800',
+            city = 'Espoo',
+            created = timezone.now(),
+            updated = timezone.now(),
+            paid = True)
+
+        OrderItem.objects.create(order=order, game=game, price=10.10, quantity=3)
+
+    def test_model_fields(self):
+        order = Order.objects.get(id=1)
+        game = Game.objects.get(id=1)
+        orderItem1 = order.items.all().first()
+        orderItem2 = game.order_items.all().first()
+        self.assertEquals(orderItem1, orderItem2)
+
+        price_max_digits = orderItem1._meta.get_field('price').max_digits
+        self.assertEquals(price_max_digits,10)
+
+        price_decimals = orderItem1._meta.get_field('price').decimal_places
+        self.assertEquals(price_decimals,2)
+
+        expected_object_name = '1'
+        self.assertEquals(expected_object_name, str(orderItem1))
+
+        expected_value = Decimal('30.30')
+        self.assertEquals(expected_value, orderItem1.get_cost())
+
+
+class OrderModelTests(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        category = Category.objects.create(name="Action", slug="action")
+        game = Game.objects.create(
+            category = category,
+            url = 'http://127.0.0.1:8000/static/own_game.html',
+            name = 'WormGame',
+            slug = "wormgame",
+            price = "100.50",
+            image = "http://127.0.0.1:8000/static/img/123369.png",
+            description = 'Matopeli',
+            times_bought = '1')
+
+        order = Order.objects.create(
+            first_name = 'Matti1',
+            last_name = 'Meikalainen1',
+            email = 'matti1.meikalainen1@gmail.com',
+            address = 'Otakaari 1',
+            postal_code = '00800',
+            city = 'Espoo',
+            created = timezone.now(),
+            updated = timezone.now(),
+            paid = True)
+
+        Order.objects.create(
+            first_name = 'Matti2',
+            last_name = 'Meikalainen2',
+            email = 'matti2.meikalainen2@gmail.com',
+            address = 'Otakaari 1',
+            postal_code = '00800',
+            city = 'Espoo',
+            created = timezone.now(),
+            updated = timezone.now(),
+            paid = True)
+
+        OrderItem.objects.create(order=order, game=game, price=10.00, quantity=4)
+        OrderItem.objects.create(order=order, game=game, price=20.0, quantity=3)
+
+    def test_order_fields(self):
+        order = Order.objects.get(id=1)
+        first_name_max_length = order._meta.get_field('first_name').max_length
+        self.assertEquals(first_name_max_length,50)
+        last_name_max_length = order._meta.get_field('last_name').max_length
+        self.assertEquals(last_name_max_length,50)
+        address_max_length = order._meta.get_field('address').max_length
+        self.assertEquals(address_max_length,250)
+        postal_code_max_length = order._meta.get_field('postal_code').max_length
+        self.assertEquals(postal_code_max_length,20)
+        city_max_length = order._meta.get_field('city').max_length
+        self.assertEquals(city_max_length,100)
+
+    def test_custom_methods(self):
+        order1 = Order.objects.get(id=1)
+        order2 = Order.objects.get(id=2)
+
+        expected_object_name ='Order 1'
+        self.assertEquals(expected_object_name, str(order1))
+
+        order_first = Order.objects.filter().first()
+        self.assertTrue(order_first == order2)
+
+        expected_order_cost = Decimal('100')
+        self.assertTrue(expected_order_cost == order1.get_total_cost())
