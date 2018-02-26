@@ -13,7 +13,7 @@
   $("#index").attr('class', 'navbar-brand active');
 </script>
     <div class="game-detail">
-        <img src="{% if game.image %}{{ game.image.url }}{% else %}{% static "no_image.png" %}{% endif %}">
+        <img src="{% if game.image %}{{ game.image }}{% else %}{% static "no_image.png" %}{% endif %}">
         <h1>{{ game.name }}</h1>
         <h2><a href="{{ game.category.get_absolute_url }}">{{ game.category }}</a></h2>
         {{ game.description|linebreaks }}

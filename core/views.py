@@ -274,8 +274,8 @@ def add_game(request):
                     slugger = slugger[:-1]  + str(i)
 
             img = 'no_image.png'   # Default image if no image is given.
-            if request.FILES.get('image',False):
-                img = request.FILES['image']
+            if request.POST.get('image',False):
+                img = request.POST['image']
             price = 0
             if float(request.POST['price']) > 0:    # Price cannot be less than 0.
                 price = request.POST['price']

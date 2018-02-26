@@ -55,7 +55,7 @@ class Game(models.Model):
     name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(max_length=255, db_index=True, unique=True)
     price =  models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
-    image = models.ImageField(upload_to='games/%Y/%m/%d', blank=True)
+    image = models.CharField(max_length=255, blank=True)
     description = models.TextField()
     times_bought = models.PositiveIntegerField(default=0)
 
