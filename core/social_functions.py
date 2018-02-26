@@ -9,6 +9,7 @@ def make_user_by_type(strategy, backend, response, user=None, *args, **kwargs):
 
     if user and user_type == 'player':
         user.is_player = True
+        user.is_social = True
         user.save()
         player = Player.objects.filter(user=user)
         if not player:
@@ -16,6 +17,7 @@ def make_user_by_type(strategy, backend, response, user=None, *args, **kwargs):
 
     elif user and user_type == 'developer':
         user.is_developer = True
+        user.is_social = True
         user.save()
         developer = Developer.objects.filter(user=user)
         if not developer:

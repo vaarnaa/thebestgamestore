@@ -7,8 +7,9 @@ from decimal import *
 
 
 class User(AbstractUser):
-    is_player = models.BooleanField(default=False)
-    is_developer = models.BooleanField(default=False)
+    is_player = models.BooleanField(default=False) #true if linked to player account
+    is_developer = models.BooleanField(default=False) #true if linked to developer account
+    is_social = models.BooleanField(default=False) #true if created by Google Sign In
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,
