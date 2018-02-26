@@ -87,7 +87,7 @@ def player_activate(request, uidb64, token):
         user.save()
         player = Player.objects.create(user=user)
         auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-        return redirect('/')
+        return redirect(LOGIN_REDIRECT_URL)
     else:
         return HttpResponse('Activation link is invalid!')
 

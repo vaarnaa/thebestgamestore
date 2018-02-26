@@ -215,6 +215,7 @@ if "DYNO" in os.environ:
     STATIC_ROOT = 'staticfiles'
     import dj_database_url
     DATABASES['default'] =  dj_database_url.config()
+    LOGIN_REDIRECT_URL = 'https://thebestgamestore.herokuapp.com'
 
     DEBUG = False # False, once service is succesfully deployed
     ALLOWED_HOSTS = ['*']
