@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.utils import timezone
 from decimal import *
 
-from core.models import User, Player, Developer, Game, Category, Highscore, Order, OrderItem
+from core.models import User, Player, Developer, Game, Category, Highscore, Order, OrderItem, Payment
 
 
 class UserTypeModelTests(TestCase):
@@ -329,3 +329,27 @@ class OrderModelTests(TestCase):
 
         expected_order_cost = Decimal('100')
         self.assertTrue(expected_order_cost == order1.get_total_cost())
+
+
+class PaymentModelTests(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        order = Order.objects.create(
+            first_name = 'Matti1',
+            last_name = 'Meikalainen1',
+            email = 'matti1.meikalainen1@gmail.com',
+            address = 'Otakaari 1',
+            postal_code = '00800',
+            city = 'Espoo',
+            created = timezone.now(),
+            updated = timezone.now(),
+            paid = True)
+
+        Payment.objects.create(payment_id=1, order=order)
+
+    def test_model_fields(self):
+        order = Order.objects.get(id=1)
+        payment1 = Payment.objects.get(payment_id=1)
+        payment2 = order.payment.filter().first()
+        self.assertTrue(payment1 == payment2)

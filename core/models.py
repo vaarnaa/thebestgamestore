@@ -220,6 +220,6 @@ Model for holding the payment id during third party payment site visit.
 """
 class Payment(models.Model):
     payment_id = models.IntegerField(primary_key=True)
-    order = models.ForeignKey(Order,
+    order = models.ForeignKey(Order, related_name="payment",
                               null=True,
                               on_delete=models.CASCADE)
