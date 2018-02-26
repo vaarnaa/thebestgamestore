@@ -92,7 +92,7 @@ primary key, the user, and as many to many relation the games
 owned by the player.
 """
 class Player(models.Model):
-    user = models.OneToOneField(User, related_name="player" on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, related_name="player", on_delete=models.CASCADE, primary_key=True)
     games = models.ManyToManyField(Game)
 
     def get_id(self):
@@ -110,7 +110,7 @@ Mode for the developers on the website. Attributes include as
 primary key, the user, and as many to many relation the games
 added by the developer."""
 class Developer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, related_name="developer", on_delete=models.CASCADE, primary_key=True)
     games = models.ManyToManyField(Game)
 
     def get_id(self):
