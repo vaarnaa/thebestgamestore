@@ -9,7 +9,10 @@ from core.models import Game, Player, Highscore, Gamestate
 from core.views import highscores
 import json
 
-# Create your views here.
+
+"""
+Renders the view for playing the games on the website.
+"""
 def play(request, id):
 
     player = get_object_or_404(Player, user_id=request.user.id)
@@ -20,6 +23,7 @@ def play(request, id):
 
     form = GamestateForm({'gameState': gamestate})
 
+    # Handles the savegame post messages sent by the game.
     if request.POST:
         if game in player.games.all():
             gameUrl = str(game.url)
@@ -57,7 +61,9 @@ def play(request, id):
             return render(request, 'game/detail.html', {'game': game,
                                                         'cart_game_form': cart_game_form})
 
-
+"""
+Saves a new highscore and renders the view for highsore page.
+"""
 def savescore(request, id):
 
     player = get_object_or_404(Player, user_id=request.user.id)
@@ -75,12 +81,3 @@ def savescore(request, id):
                                  score=new_score)
 
     return redirect(reverse('highscores'), permanent=True)
-
-
-def loadgame(request, game_id):
-
-    player = get_object_or_404(Player, get_id=player_id)
-    game = get_object_or_404(Game, id=game_id)
-    gameUrl = game.url
-
-    return render(request, 'gameService/gameService.html', {'gameUrl': gameUrl})
