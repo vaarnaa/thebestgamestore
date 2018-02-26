@@ -2,7 +2,7 @@ from django.test import TestCase
 
 # Create your tests here.
 
-from core.models import User, Player, Developer, Game, Category
+from core.models import User, Player, Developer, Game, Category, Highscore
 
 
 class UserTypeModelTests(TestCase):
@@ -135,21 +135,24 @@ class GameModelTests(TestCase):
             description = 'Action-peli',
             times_bought = '1')
 
-    def test_category_field(self):
-        pass
 
     def test_meta_fields(self):
         category = Category.objects.get(id=1)
-        game1 = Game.objects.get(id=1)
-        game2 = Game.objects.get(id=2)
+        games = category.games.all()
+        game1 = games[0]
+        game2 = games[1]
         self.assertTrue(game1.category, category)
         self.assertTrue(game2.category, category)
+
         game_label = game1._meta.verbose_name
         self.assertEquals(game_label,'game')
+
         game_label = game1._meta.verbose_name_plural
         self.assertEquals(game_label,'games')
+
         game_first = Game.objects.filter().first()
         self.assertEquals(game_first.name, 'ActionGame')
+
 
     def test_custom_methods(self):
         game = Game.objects.get(id=1)
@@ -157,3 +160,44 @@ class GameModelTests(TestCase):
         self.assertEquals(expected_object_name,str(game))
         self.assertEquals(game.get_absolute_url(),'/1/wormgame/')
         self.assertEquals(game.get_short_description(), 'Matopeli')
+
+
+
+class HighscoreModelTests(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        category = Category.objects.create(name="Action", slug="action")
+        game = Game.objects.create(
+            category = category,
+            url = 'http://127.0.0.1:8000/static/own_game.html',
+            name = 'WormGame',
+            slug = "wormgame",
+            price = "100.50",
+            image = "http://127.0.0.1:8000/static/img/123369.png",
+            description = 'Matopeli',
+            times_bought = '1')
+        user_player = User.objects.create_user(username='Matti1', email='matti1.meikalainen1@gmail.com', password='salasana1', first_name='Matti1', last_name='Meikalainen1')
+        user_player.is_player = True
+        user_player.save()
+        player = Player.objects.create(user=user_player)
+        Highscore.objects.create(game=game, player=player, score=10)
+        Highscore.objects.create(game=game, player=player, score=100)
+
+
+    def test_highscore_fields(self):
+        player_user = User.objects.get(id=1)
+        player = player_user.player
+        game = Game.objects.get(id=1)
+        highscore1 = game.highscores.filter().first()
+        highscore2 = player.highscores.filter().first()
+        self.assertTrue(highscore1, highscore2)
+        
+
+    def test_custom_methods(self):
+
+        expected_object_name = highscore1.player_name()
+        self.assertEquals(expected_object_name,player_user.username)
+
+        highscore_first = Highscore.objects.filter().first()
+        self.assertEquals(highscore_first.score, 100)
