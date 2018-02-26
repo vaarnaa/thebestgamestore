@@ -219,10 +219,10 @@ if "DYNO" in os.environ:
     import dj_database_url
     DATABASES['default'] =  dj_database_url.config()
     LOGIN_REDIRECT_URL = 'https://thebestgamestore.herokuapp.com'
-    os.environ['HTTPS'] = "on"
-    os.environ['wsgi.url_scheme'] = 'https'
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+    #os.environ['HTTPS'] = "on"
+    #os.environ['wsgi.url_scheme'] = 'https'
+    #SESSION_COOKIE_SECURE = True
+    #CSRF_COOKIE_SECURE = True
 
     DEBUG = False # False, once service is succesfully deployed
     ALLOWED_HOSTS = ['*']
