@@ -2,23 +2,13 @@
 {% load staticfiles %}
 {% load static %}
 
-{% block head %}
-<meta property="og:image" content="https://thebestgamestore.herokuapp.com/static/img/lataus.jpg" />
-<meta property="og:title" content="The Best Game Store" />
-<meta property="og:description" content="Online game store for buying and selling javascript games" />
-{% endblock %}
-
 {% block content %}
   <script>
     $("#index").attr('class', 'navbar-brand active');
     $( "div#title" ).removeClass( "container" )
   </script>
   <div id="title">
-    <div class="logo"><img src="{% static "media/HeaderText4.svg" %}" alt="Title The Best Game Store"></div><!--http://127.0.0.1:8000/-->
-    <div id="facebook-share">
-      <p>Tell your friends about us</p>
-      <button type="button" class="btn btn-primary facebook" target="_blank" ><a href="http://www.facebook.com/sharer/sharer.php?u=https://thebestgamestore.herokuapp.com/{{ request.get_full_path|urlencode }}">Share on Facebook</a></button>
-    </div>
+    <div class="logo"><img src="{% static "media/HeaderText4.svg" %}" alt="Title The Best Game Store"></div>
   </div>
 
   <div class="row">
