@@ -21,7 +21,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "4c5e699656586b17e3775a51281cb3d0"
+#SECRET_KEY = "4c5e699656586b17e3775a51281cb3d0"
+
+# SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = 'eov+z4px*6rlqcz$!x2$9m-%pvvwkkvx&1817-#am)ouqfq698'
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'eov+z4px*6rlqcz$!x2$9m-%pvvwkkvx&1817-#am)ouqfq698')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -204,3 +209,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 CART_SESSION_ID = 'cart'
 
 django_heroku.settings(locals())
+
+# Only when running in Heroku
+if "DYNO" in os.environ:
+    STATIC_ROOT = 'staticfiles'
+    import dj_database_url
+    DATABASES['default'] =  dj_database_url.config()
+
+    DEBUG = False # False, once service is succesfully deployed
+    ALLOWED_HOSTS = ['*']
