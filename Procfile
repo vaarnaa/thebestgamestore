@@ -1,1 +1,1 @@
-web: gunicorn thebestgamestore.wsgi
+web: gunicorn thebestgamestore.wsgi --log-file -
