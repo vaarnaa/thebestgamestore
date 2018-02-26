@@ -26,8 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'eov+z4px*6rlqcz$!x2$9m-%pvvwkkvx&1817-#am)ouqfq698'
 
-os.environ['HTTPS'] = "on"
-os.environ['wsgi.url_scheme'] = 'https'
+
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'eov+z4px*6rlqcz$!x2$9m-%pvvwkkvx&1817-#am)ouqfq698')
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -187,8 +186,7 @@ SOCIAL_AUTH_USER_MODEL = 'core.User'
 
 LOGIN_REDIRECT_URL = '/'
 
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
@@ -221,6 +219,10 @@ if "DYNO" in os.environ:
     import dj_database_url
     DATABASES['default'] =  dj_database_url.config()
     LOGIN_REDIRECT_URL = 'https://thebestgamestore.herokuapp.com'
+    os.environ['HTTPS'] = "on"
+    os.environ['wsgi.url_scheme'] = 'https'
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
     DEBUG = False # False, once service is succesfully deployed
     ALLOWED_HOSTS = ['*']
